@@ -5,4 +5,7 @@ set(src_folder "src/")
 
 project(${project_name})
 
-add_executable(${project_name} main.c ${src_folder}4004_chip.c)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src_asm DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+add_executable(${project_name} main.c ${src_folder}4004_chip.c ${src_folder}utils.c)
