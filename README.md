@@ -1,0 +1,58 @@
+# Intel 4004 emulator
+```text
+      I/O   I/O   I/O   I/O   Vdd    CM   TEST  RESET
+       --    --    --    --    --    --    --    --
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+   ---    --    --    --    --    --    --    --    ---
+  |    16    15    14    13    12    11    10     9    |
+  |                                                    |
+  |           ##      ###         ###           ##     |
+  |          ###    ##   ##     ##   ##        ###     |
+   --       # ##   ##     ##   ##     ##      # ##     |
+     |     #  ##   ##     ##   ##     ##     #  ##     |
+     |    #   ##   ##     ##   ##     ##    #   ##     |
+   --    #######   ##     ##   ##     ##   #######     |
+  |           ##    ##   ##     ##   ##         ##     |
+  |           ##      ###         ###           ##     |
+  |                                                    |
+  |     1     2     3     4     5     6     7     8    |
+   ---    --    --    --    --    --    --    --    ---
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+       --    --    --    --    --    --    --    --
+       D0    D1    D2    D3    Vss   Ph1   Ph2  SYNC
+```
+Simple emulator of the Intel 4004 chip.
+
+The Intel 4004 was the first computer that I made an emulator, unfortunately I lost the code. Since then I have been studying and assembling small emulators and studying the architecture of computers and embedded devices. After a long time I am going back to the emulators, and the first one that I will focus on development is the Intel 4004, because it is a simple device with a few instructions (46 instructions).
+
+## Intel 4004
+
+Intel 4004 is a 4-bit CPU released by Intel in 1971, which was the first commercial programmable microprocessor.
+
+## Compile
+
+Inside the root dir of the project.
+
+```sh
+mkdir build && cd build
+cmake ..
+make
+```
+
+That create the executable ```4004_emulator```.
+
+## References
+
+If you don't know anything about intel 4004, your [wikipedia](https://en.wikipedia.org/wiki/Intel_4004) page is a good place to start.
+
+Brief history of the Intel 4004. [Intel's First Microprocessor](https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html)
+
+[4004 Datasheet](https://datasheet4u.com/datasheet-pdf/Intel/4004/pdf.php?id=787753)*
+
+[MCS-4 Assembly Language Programming Manual - December 1973](http://www.nj7p.org/Manuals/PDFs/Intel/MCS-4_ALPM_Dec73.pdf)*
+
+Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.szyc.org/)
+
+## License
+
+[MIT](./LICENSE)
