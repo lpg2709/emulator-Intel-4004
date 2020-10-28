@@ -1,7 +1,6 @@
 #ifndef CHIP4004_H
 #define CHIP4004_H
 
-#include <bits/stdint-uintn.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,5 +44,11 @@ void opcode_fin(chip_4004 *c, uint8_t opa);  	// 0x3-0
 void opcode_jin(chip_4004 *c, uint8_t opa); 	// 0x3-1
 void opcode_jun(chip_4004 *c, uint16_t opa); 	// 0x4---
 void opcode_jms(chip_4004 *c, uint16_t opa); 	// 0x5---
+void opcode_inc(chip_4004 *c, uint8_t opa); 	// 0x6-
+void opcode_isz(chip_4004 *c, uint16_t opa);    // 0x7---
+void opcode_add(chip_4004 *c, uint8_t opa); 	// 0x8-
+void opcode_sub(chip_4004 *c, uint8_t opa); 	// 0x9-
+void opcode_ld(chip_4004 *c, uint8_t opa); 		// 0xA-
+void opcode_xch(chip_4004 *c, uint8_t opa); 	// 0xB-
 
 #endif

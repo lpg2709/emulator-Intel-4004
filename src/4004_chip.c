@@ -1,8 +1,4 @@
 #include "./4004_chip.h"
-#include <bits/stdint-uintn.h>
-#include <stdio.h>
-#include <string.h>
-#include <strings.h>
 
 void init4004(chip_4004 *c){
 	memset((void*) c->IR, 0, 16);
@@ -85,4 +81,51 @@ void opcode_jms(chip_4004 *c, uint16_t opa){
 	c->STACK.addrs[c->STACK.SP] = c->PC;
 	c->STACK.SP == 2 ? c->STACK.SP = 0: c->STACK.SP++;	
 	c->PC = (opa & 0XFFF);
+}
+
+void opcode_inc(chip_4004 *c, uint8_t opa){
+	c->IR[opa & 0xF]++;
+	c->PC++;
+}
+
+void opcode_isz(chip_4004 *c, uint16_t opa){
+	uint8_t IR_addrs = (opa & 0xF00) >> 8;
+	uint8_t rom_addrs = (opa & 0xFF);
+	c->IR[IR_addrs]++;
+	if(c->IR[IR_addrs] != 0)
+		c->PC  = (((c->PC + 1) % ROM_PAGE_SIZE == 1) ? ((c->PC+1) & 0xF00): (c->PC & 0xF00)) | (rom_addrs);
+	else
+		c->PC += 2;
+}
+
+void opcode_add(chip_4004 *c, uint8_t opa){
+	uint8_t IR_addrs = (opa & 0xF);
+	c->ACC += c->IR[IR_addrs] + c->carry;
+	c->carry = false;
+	if(c->ACC & 0xF0){
+		c->ACC &= 0xF;
+		c->carry = true;
+	}
+	c->PC++;
+}
+
+void opcode_sub(chip_4004 *c, uint8_t opa){
+	uint8_t IR_addrs = (opa & 0xF);
+	c->ACC += ~c->IR[IR_addrs] + !c->carry;
+	c->carry = false;
+	if(c->ACC & 0xF0){
+		c->ACC &= 0xF;
+		c->carry = true;
+	}
+	c->PC++;
+}
+
+void opcode_ld(chip_4004 *c, uint8_t opa){
+	c->ACC = c->IR[(opa & 0xF)];
+	c->PC++;
+}
+
+void opcode_xch(chip_4004 *c, uint8_t opa){
+	c->IR[(opa & 0xF)] = c->ACC;
+	c->PC++;
 }
