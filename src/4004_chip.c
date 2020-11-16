@@ -1,4 +1,6 @@
 #include "./4004_chip.h"
+#include <bits/stdint-uintn.h>
+#include <stdint.h>
 
 void init4004(chip_4004 *c){
 	memset((void*) c->IR, 0, 16);
@@ -6,6 +8,7 @@ void init4004(chip_4004 *c){
 	memset((void*) c->RAM, 0, 4096*8);
 	memset((void*) c->STACK.addrs, 0, 3);
 	c->STACK.SP = 0;
+	c->RAM_bank = 0;
 	c->PC = 0;
 	c->ACC = 0;
 	c->carry = false;
@@ -31,8 +34,8 @@ void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 	}
 }
 
-void opcode_nop(){
-	return;
+void opcode_nop(chip_4004 *c){
+	c->PC++;
 }
 
 void opcode_jcn(chip_4004 *c, uint16_t opa){
@@ -129,3 +132,137 @@ void opcode_xch(chip_4004 *c, uint8_t opa){
 	c->IR[(opa & 0xF)] = c->ACC;
 	c->PC++;
 }
+
+void opcode_bbl(chip_4004 *c, uint8_t opa){
+	c->ACC = (opa & 0xF);
+	c->PC = c->STACK.addrs[c->STACK.SP];
+	c->STACK.SP <= 0 ? c->STACK.SP = 0: c->STACK.SP--;	
+}
+
+void opcode_ldm(chip_4004 *c, uint8_t opa){
+	c->ACC = (opa & 0xF);
+	c->PC++;
+}
+
+void opcode_clb(chip_4004 *c){
+	c->ACC = 0x0;
+	c->carry = false;
+	c->PC++;
+}
+
+void opcode_clc(chip_4004 *c){
+	c->carry = false;
+	c->PC++;
+}
+
+void opcode_iac(chip_4004 *c){
+	c->ACC++;
+	if(c->ACC > 15){
+		c->ACC = 0;
+		c->carry = true;
+	}
+	c->PC++;
+}
+
+void opcode_cmc(chip_4004 *c){
+	c->carry = !c->carry;
+	c->PC++;
+}
+
+void opcode_cma(chip_4004 *c){
+	c->ACC ^= c->ACC;
+	c->PC++;
+}
+
+void opcode_ral(chip_4004 *c){
+	c->ACC = (c->ACC | c->carry << 4) << 1;
+	if((c->ACC & 0xF0) == 0)
+		c->carry = false;
+	else
+		c->carry = true;
+	c->ACC = c->ACC & 0xF;
+	c->PC++;
+}
+
+void opcode_rar(chip_4004 *c){
+	uint8_t temp = c->ACC & 1;
+	c->ACC = (c->ACC>>1 | c->carry <<3 );
+	c->carry = temp;
+	c->PC++;
+}
+
+void opcode_tcc(chip_4004 *c){
+	c->ACC = (int) c->carry;
+	c->carry = false;
+	c->PC++;
+}
+
+void opcode_dac(chip_4004 *c){
+	c->ACC-=1;
+	if(c->ACC < 0){
+		c->ACC = 0xF;
+		c->carry = false;
+	}
+	if(c->ACC > 15){
+		c->ACC = 0;
+		c->carry = true;
+	}
+	c->PC++;
+}
+
+void opcode_tcs(chip_4004 *c){
+	if(c->carry == false)
+		c->ACC = 0x9;
+	else
+		c->ACC = 0xA;
+	c->carry = false;
+	c->PC++;
+}
+
+void opcode_stc(chip_4004 *c){
+	c->carry = true;
+	c->PC++;
+}
+
+void opcode_daa(chip_4004 *c){
+	if(c->ACC > 9 || c->carry == true){
+		c->ACC+=6;
+		if(c->ACC > 15){
+			c->ACC = 0;
+			c->carry = true;
+		}
+	 }
+	c->PC++;
+}
+
+void opcode_kbp(chip_4004 *c){
+	if(c->ACC != 0){
+		switch (c->ACC) {
+			case 0:
+				c->ACC = 0x0; // 0b0000
+				break;
+			case 1:
+				c->ACC = 0x1; // 0b0001
+				break;
+			case 2:
+				c->ACC = 0x2; // 0b0010
+				break;
+			case 4:
+				c->ACC = 0x3; // 0b0011
+				break;
+			case 8:
+				c->ACC = 0x4; // 0b0100
+				break;
+			default:
+				c->ACC = 0xFF; // 0b1111
+				break;
+		}
+	}
+	c->PC++;
+}
+
+void opcode_dcl(chip_4004 *c){
+	c->RAM_bank =  c->ACC & 0x7;
+	c->PC++;
+}
+
