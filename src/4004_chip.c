@@ -9,6 +9,7 @@ void init4004(chip_4004 *c){
 	memset((void*) c->STACK.addrs, 0, 3);
 	c->STACK.SP = 0;
 	c->RAM_bank = 0;
+	c->RAM_addrs = 0;
 	c->PC = 0;
 	c->ACC = 0;
 	c->carry = false;
@@ -64,7 +65,7 @@ void opcode_fim(chip_4004 *c, uint16_t opa){
 }
 
 void opcode_fin(chip_4004 *c, uint8_t opa){
-	uint8_t IR_pair = (opa & 0xE);	
+	uint8_t IR_pair = (opa & 0xE);
 	uint16_t rom_addrs = (((c->PC + 1) % ROM_PAGE_SIZE == 1) ? ((c->PC+1) & 0xF00): (c->PC & 0xF00)) | (c->IR[0] << 4) | (c->IR[1]);
 	c->IR[IR_pair] = (c->ROM[rom_addrs] & 0xF);
 	c->IR[IR_pair+1] = (c->IR[rom_addrs] & 0xF0) >> 4;
@@ -266,3 +267,13 @@ void opcode_dcl(chip_4004 *c){
 	c->PC++;
 }
 
+void opcode_src(chip_4004 *c, uint8_t opa){
+	uint8_t IR_pair = (opa & 0x0F) >> 1;
+	c->RAM_addrs = ((c->IR[IR_pair]) << 4) || c->IR[IR_pair+1];
+	c->PC++;
+}
+
+void opcode_wrm(chip_4004 *c){
+	c->RAM[(c->RAM_addrs*c->RAM_bank)] = c->ACC;
+	c->PC++;
+}

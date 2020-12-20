@@ -18,6 +18,7 @@ struct sct_chip_4004{
 	uint8_t ROM[4096];	
 	uint8_t RAM[4096*8];
 	uint8_t RAM_bank;
+	uint8_t RAM_addrs;
 	struct sct_stack{
 		uint16_t addrs[3];        // Save the address, on 4004 are 12 bits not 16
 		uint8_t SP:2;             // Stack Pointer
@@ -39,14 +40,14 @@ void chip_reset(chip_4004 *c); 		// Reset all chip
  * Instruction Set
  * */
 
-void opcode_nop(chip_4004 *c); 					// 0x0000
-void opcode_jcn(chip_4004 *c, uint16_t opa); 	// 0x1---
-void opcode_fim(chip_4004 *c, uint16_t opa); 	// 0x2---
-void opcode_fin(chip_4004 *c, uint8_t opa);  	// 0x3-0
-void opcode_jin(chip_4004 *c, uint8_t opa); 	// 0x3-1
-void opcode_jun(chip_4004 *c, uint16_t opa); 	// 0x4---
-void opcode_jms(chip_4004 *c, uint16_t opa); 	// 0x5---
-void opcode_inc(chip_4004 *c, uint8_t opa); 	// 0x6-
+void opcode_nop(chip_4004 *c);					// 0x0000
+void opcode_jcn(chip_4004 *c, uint16_t opa);	// 0x1---
+void opcode_fim(chip_4004 *c, uint16_t opa);	// 0x2---
+void opcode_fin(chip_4004 *c, uint8_t opa);		// 0x3-0
+void opcode_jin(chip_4004 *c, uint8_t opa);		// 0x3-1
+void opcode_jun(chip_4004 *c, uint16_t opa);	// 0x4---
+void opcode_jms(chip_4004 *c, uint16_t opa);	// 0x5---
+void opcode_inc(chip_4004 *c, uint8_t opa);		// 0x6-
 void opcode_isz(chip_4004 *c, uint16_t opa);    // 0x7---
 void opcode_add(chip_4004 *c, uint8_t opa); 	// 0x8-
 void opcode_sub(chip_4004 *c, uint8_t opa); 	// 0x9-
@@ -68,5 +69,8 @@ void opcode_stc(chip_4004 *c); 					// 0xFA
 void opcode_daa(chip_4004 *c); 					// 0xFB
 void opcode_kbp(chip_4004 *c); 					// 0xFC
 void opcode_dcl(chip_4004 *c); 					// 0xFD
+void opcode_src(chip_4004 *c, uint8_t opa);     // 0x2-
+void opcode_wrm(chip_4004 *c);					// 0xE0
+
 
 #endif
