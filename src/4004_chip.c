@@ -1,19 +1,7 @@
 #include "./4004_chip.h"
-#include <bits/stdint-uintn.h>
-#include <stdint.h>
 
 void init4004(chip_4004 *c){
-	memset((void*) c->IR, 0, 16);
-	memset((void*) c->ROM, 0, 4096);
-	memset((void*) c->RAM, 0, 4096*8);
-	memset((void*) c->STACK.addrs, 0, 3);
-	c->STACK.SP = 0;
-	c->RAM_bank = 0;
-	c->RAM_addrs = 0;
-	c->PC = 0;
-	c->ACC = 0;
-	c->carry = false;
-	c->test = false;
+	chip_reset(c);
 }
 
 bool loadProgramROM(chip_4004 *c, const char *program){
@@ -33,6 +21,23 @@ void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 
 
 	}
+}
+
+void chip_reset(chip_4004 *c){
+	memset((void*) c->IR, 0, sizeof(uint8_t)*16);
+	memset((void*) c->ROM, 0, sizeof(uint8_t)*4096);
+	memset((void*) c->RAM, 0, sizeof(uint8_t)*4096*8);
+	memset((void*) c->RAM_status, 0, sizeof(uint8_t)*8);
+	memset((void*) c->STACK.addrs, 0, sizeof(uint16_t)*3);
+	memset((void*) c->RAM_output, 0, sizeof(uint8_t)*4*8);
+	c->STACK.SP = 0;
+	c->RAM_bank = 0;
+	c->RAM_addrs = 0;
+	c->ROM_io = 0;
+	c->PC = 0;
+	c->ACC = 0;
+	c->carry = false;
+	c->test = false;
 }
 
 void opcode_nop(chip_4004 *c){
@@ -277,3 +282,53 @@ void opcode_wrm(chip_4004 *c){
 	c->RAM[(c->RAM_addrs*c->RAM_bank)] = c->ACC;
 	c->PC++;
 }
+
+void opcode_wmp(chip_4004 *c){
+	c->RAM_output[c->RAM_bank] = c->ACC & 0x0F;
+	c->PC++;
+}
+
+void opcode_wrr(chip_4004 *c){
+	c->ROM_io = c->ACC & 0x0F;
+	c->PC++;
+}
+
+void opcode_wrN(chip_4004 *c, uint8_t n){
+	c->RAM_status[(n*4 + c->RAM_bank)] = c->ACC &0x0F;
+	c->PC++;
+}
+
+void opcode_smb(chip_4004 *c){
+	c->ACC += ~c->RAM[(c->RAM_addrs*c->RAM_bank)] + !c->carry;
+	c->carry = false;
+	if(c->ACC & 0xF0){
+		c->ACC &= 0xF;
+		c->carry = true;
+	}
+	c->PC++;
+}
+
+void opcode_rdm(chip_4004 *c){
+	c->ACC = c->RAM[(c->RAM_addrs*c->RAM_bank)];
+	c->PC++;
+}
+
+void opcode_rdr(chip_4004 *c){
+	c->ACC = c->ROM_io;
+	c->PC++;
+}
+
+void opcode_adm(chip_4004 *c){
+	c->ACC += c->RAM[(c->RAM_addrs*c->RAM_bank)] + c->carry;
+	if(c->ACC & 0xF0){
+		c->ACC &= 0xF;
+		c->carry = true;
+	}
+	c->PC++;
+}
+
+void opcode_rdN(chip_4004 *c, uint8_t n){
+	c->ACC = c->RAM_status[(n*4 + c->RAM_bank)];
+	c->PC++;
+}
+
