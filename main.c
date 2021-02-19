@@ -6,13 +6,18 @@
 
 int main(){
 	
-	const char *ram_test = read_file("./src_asm/ram_test.o");
+	long size;
+	uint8_t *rom_ram_test = (uint8_t*) b_read_file("./tests_src/ram_test", &size);
 	chip_4004 myChip;
 	init4004(&myChip);
 
-	loadProgramROM(&myChip, ram_test);
+	loadProgramROM(&myChip, rom_ram_test, size);
 
-	printf("\n%s\n", ram_test);
-
+	chip_cycle(&myChip, 2);
+	
+	/*
+	uint8_t hex[] = {0x20, 0x00, 0x22, 0x00, 0xDC, 0xB2, 0x21, 0xE0, 0xF2, 0x71, 0x06, 0x60, 0x72, 0x06, 0x20, 0x00, 0x22, 0x00, 0xDC, 0xB2, 0x21, 0xE4, 0xF2, 0xE5, 0xF2, 0xE6, 0xF2, 0xE7, 0xF2, 0x60, 0x72, 0x14, 0x40, 0x20};
+	b_write_file("./tests_src/ram_test", hex, sizeof(*hex), sizeof(hex));
+	*/
 	return 0;
 }

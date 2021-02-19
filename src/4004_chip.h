@@ -32,7 +32,7 @@ struct sct_chip_4004{
 };
 
 void init4004(chip_4004 *c);
-bool loadProgramROM(chip_4004 *c, const char *program);
+bool loadProgramROM(chip_4004 *c, uint8_t *program, long program_size);
 
 void chip_cycle(chip_4004 *c, uint32_t cycles_limit);
 void chip_reset(chip_4004 *c); 		// Reset all chip
@@ -80,7 +80,7 @@ void opcode_wrN(chip_4004 *c, uint8_t n);       // 0xE4--0xE7
  * wr0  -  wr1 -  wr2 -  wr3
  * 0xE4 - 0xE5 - 0xE6 - 0xE7
  */
-void opcode_smb(chip_4004 *c);                  // 0xE8
+void opcode_sbm(chip_4004 *c);                  // 0xE8
 void opcode_rdm(chip_4004 *c);                  // 0xE9
 void opcode_rdr(chip_4004 *c);                  // 0xEA
 void opcode_adm(chip_4004 *c);                  // 0xEB

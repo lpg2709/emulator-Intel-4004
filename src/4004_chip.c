@@ -4,22 +4,197 @@ void init4004(chip_4004 *c){
 	chip_reset(c);
 }
 
-bool loadProgramROM(chip_4004 *c, const char *program){
-	int program_size = strlen(program);
+bool loadProgramROM(chip_4004 *c, uint8_t *program, long program_size){
 	if(program_size >= 4096){
-		printf("Load program to ROM error: the maximum size is 4096 bits, your code have %d bit(s).\n", program_size);
+		printf("Load program to ROM error: the maximum size is 4096 bits, your code have %ld bit(s).\n", program_size);
 		return false;
 	}
 	memcpy(c->ROM, program, program_size);
+	// REMOVE: FOR DEV
+	printf("------------------------------------------ ROM MEMORY -----------------------------------------\n");
+	int i;
+	for(i = 0; i < 4096; i++){
+		if(i%32 == 0 && i != 0)
+			printf("\n");	
+		printf("%02X ", c->ROM[i]);
+	}
+	printf("\n-----------------------------------------------------------------------------------------------\n");
+	// END
 	return true;
 }
 
 void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 	uint32_t cycle = 0;
+	uint16_t mOpcode;
 
 	while(cycle < cycles_limit){
+		mOpcode = c->ROM[c->PC];
 
+		printf("\nPC: %d\n", c->PC);
+		printf("Cycles: %d\n", cycle);
+		printf("Current Opcode: %X\n", mOpcode);
+		printf("Acumulator: %X\n", c->ACC);
 
+		switch(mOpcode & 0xF0){
+			case 0x00:
+				opcode_nop(c);
+				break;
+			case 0x10:
+				opcode_jcn(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
+				cycle++;
+				break; 
+			case 0x20:
+				switch(mOpcode & 0x0F){
+					case 0x00:
+						opcode_fim(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
+						cycle++;
+						break;
+					case 0x01:
+						opcode_src(c, mOpcode & 0x0F);
+						break;
+				}
+				break;
+			case 0x30:
+				switch(mOpcode & 0x0F){
+					case 0x00:
+						opcode_fin(c, mOpcode & 0x0F);
+						break;
+					case 0x01:
+						opcode_jin(c, mOpcode & 0x0F);
+						break;
+				}
+				break;
+			case 0x40:
+				opcode_jun(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
+				cycle++;
+				break;
+			case 0x50:
+				opcode_jms(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
+				cycle++;
+				break;
+			case 0x60:
+				opcode_inc(c, mOpcode & 0x0F);
+				break;
+			case 0x70:
+				opcode_isz(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
+				cycle++;
+				break;
+			case 0x80:
+				opcode_add(c, mOpcode & 0x0F);
+				break;
+			case 0x90:
+				opcode_sub(c, mOpcode & 0x0F);
+				break;
+			case 0xA0:
+				opcode_ld(c, mOpcode & 0x0F);
+				break;
+			case 0xB0:
+				opcode_xch(c, mOpcode & 0x0F);
+				break;
+			case 0xC0:
+				opcode_bbl(c, mOpcode & 0x0F);
+				break;
+			case 0xD0:
+				opcode_ldm(c, mOpcode & 0x0F);
+				break;
+			case 0xF0:
+				switch(mOpcode & 0x0F){
+					case 0x0:
+						opcode_clb(c);
+						break;
+					case 0x1:
+						opcode_clc(c);
+						break;
+					case 0x2:
+						opcode_iac(c);
+						break;
+					case 0x3:
+						opcode_cmc(c);
+						break;
+					case 0x4:
+						opcode_cma(c);
+						break;
+					case 0x5:
+						opcode_ral(c);
+						break;
+					case 0x6:
+						opcode_rar(c);
+						break;
+					case 0x7:
+						opcode_tcc(c);
+						break;
+					case 0x8:
+						opcode_dac(c);
+						break;
+					case 0x9:
+						opcode_tcs(c);
+						break;
+					case 0xA:
+						opcode_stc(c);
+						break;
+					case 0xB:
+						opcode_daa(c);
+						break;
+					case 0xC:
+						opcode_kbp(c);
+						break;
+					case 0xD:
+						opcode_dcl(c);
+						break;
+				}
+				break;
+			case 0xE0:
+				switch(mOpcode & 0x0F){
+					case 0x0:
+						opcode_wrm(c);
+						break;
+					case 0x1:
+						opcode_wmp(c);
+						break;
+					case 0x2:
+						opcode_wrr(c);
+						break;
+					case 0x4:
+						opcode_wrN(c, (uint8_t)0x04);
+						break;
+					case 0x5:
+						opcode_wrN(c, (uint8_t)0x05);
+						break;
+					case 0x6:
+						opcode_wrN(c, (uint8_t)0x06);
+						break;
+					case 0x7:
+						opcode_wrN(c, (uint8_t)0x07);
+						break;
+					case 0x8:
+						opcode_sbm(c);
+						break;
+					case 0x9:
+						opcode_rdm(c);
+						break;
+					case 0xA:
+						opcode_rdr(c);
+						break;
+					case 0xB:
+						opcode_adm(c);
+						break;
+					case 0xC:
+						opcode_rdN(c, (uint8_t) 0x0C);
+						break;
+					case 0xD:
+						opcode_rdN(c, (uint8_t) 0x0D);
+						break;
+					case 0xE:
+						opcode_rdN(c, (uint8_t) 0x0E);
+						break;
+					case 0xF:
+						opcode_rdN(c, (uint8_t) 0x0F);
+						break;
+				}
+				break;
+		}
+		
+		cycle++;		
 	}
 }
 
@@ -298,7 +473,7 @@ void opcode_wrN(chip_4004 *c, uint8_t n){
 	c->PC++;
 }
 
-void opcode_smb(chip_4004 *c){
+void opcode_sbm(chip_4004 *c){
 	c->ACC += ~c->RAM[(c->RAM_addrs*c->RAM_bank)] + !c->carry;
 	c->carry = false;
 	if(c->ACC & 0xF0){
