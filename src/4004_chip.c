@@ -21,11 +21,6 @@ void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 	while(cycle < cycles_limit){
 		mOpcode = c->ROM[c->PC];
 
-		printf("\nPC: %d\n", c->PC);
-		printf("Cycles: %d\n", cycle);
-		printf("Current Opcode: %X\n", mOpcode);
-		printf("Acumulator: %X\n", c->ACC);
-
 		switch(mOpcode & 0xF0){
 			case 0x00:
 				opcode_nop(c);
@@ -192,8 +187,8 @@ void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 void chip_reset(chip_4004 *c){
 	memset((void*) c->IR, 0, sizeof(uint8_t)*16);
 	memset((void*) c->ROM, 0, sizeof(uint8_t)*4096);
-	memset((void*) c->RAM, 0, sizeof(uint8_t)*4096*8);
-	memset((void*) c->RAM_status, 0, sizeof(uint8_t)*8);
+	memset((void*) c->RAM, 0, sizeof(uint8_t)*2048);
+	memset((void*) c->RAM_status, 0, sizeof(uint8_t)*128);
 	memset((void*) c->STACK.addrs, 0, sizeof(uint16_t)*3);
 	memset((void*) c->RAM_output, 0, sizeof(uint8_t)*4*8);
 	c->STACK.SP = 0;
