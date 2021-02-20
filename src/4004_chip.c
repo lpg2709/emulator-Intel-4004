@@ -10,16 +10,7 @@ bool loadProgramROM(chip_4004 *c, uint8_t *program, long program_size){
 		return false;
 	}
 	memcpy(c->ROM, program, program_size);
-	// REMOVE: FOR DEV
-	printf("------------------------------------------ ROM MEMORY -----------------------------------------\n");
-	int i;
-	for(i = 0; i < 4096; i++){
-		if(i%32 == 0 && i != 0)
-			printf("\n");	
-		printf("%02X ", c->ROM[i]);
-	}
-	printf("\n-----------------------------------------------------------------------------------------------\n");
-	// END
+
 	return true;
 }
 

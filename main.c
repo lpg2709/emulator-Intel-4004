@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 #include "./src/4004_chip.h"
-#include "./src/utils.h"
+#include "./src/files.h"
+#include "./src/gui_cli.h"
 
 int main(){
 	
@@ -12,6 +13,8 @@ int main(){
 	init4004(&myChip);
 
 	loadProgramROM(&myChip, rom_ram_test, size);
+	cli_d_print_rom_memory(&myChip);
+
 
 	chip_cycle(&myChip, 2);
 	
