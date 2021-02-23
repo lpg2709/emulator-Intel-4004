@@ -12,16 +12,14 @@ void cli_d_print_rom_memory(chip_4004 *c){
 }
 
 void cli_d_print_all_ram(chip_4004 *c){
-	int i, bank, chip;;
-	
-//	printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3\n");
-//	printf("REGISTER 0: ");
+	int i, j,bank, chip;
 	
 	printf("------------------------------------------ RAM MEMORY -----------------------------------------\n");
-	bank=chip=0;
+	bank=chip=j=0;
 	for(i = 0; i < 2048; i++){
 		if(i == 0 || i%64 == 0){
-			printf("\n\nBANK: %d  CHIP: %d\n", bank, chip);
+			printf("\n\n              BANK: %d CHIP: %d              \n", bank, chip);
+			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F");
 		}
 		if(i%64 == 0){
 			chip++;
@@ -30,8 +28,13 @@ void cli_d_print_all_ram(chip_4004 *c){
 				chip = 0;
 			}
 		}
-		if(i%16 ==0)
+		if(i%16 == 0){
 			printf("\n");
+			if(j > 3)
+				j = 0;
+			printf("REGISTER %d: ", j);
+			j++;
+		}
 		printf("%X ", c->RAM[i]);
 	}
 	printf("\n-----------------------------------------------------------------------------------------------\n");
@@ -58,7 +61,7 @@ void cli_screen_startup(){
 		"  |                          |\n"
 		"   --#--#--#--#--#--#--#--#--\n"
 		"\n"
-		"Press ENTER  key to continue...\n");
+		"Press ENTER key to continue...\n");
 	while(1){
 		char c = getchar();
 		if(c == '\n')
@@ -68,27 +71,14 @@ void cli_screen_startup(){
 }
 
 void cli_main_view(chip_4004 *c, uint64_t cycle){
+	int bank, chip;
+	bank = chip = 0;
+
+#define RAM(index) c->RAM[index+(chip*63)+(bank*255)]
+#define RAM_STATUS(index) c->RAM_status[index+(chip*15)+(bank*63)]
 	printf(
 			"\n"
-			"    STACK             INDEX REGISTERS\n"
-			"LEVEL 1: %03X     R0 R1: %X %X  R8 R9: %X %X\n"
-			"LEVEL 2: %03X     R2 R3: %X %X  RA RB: %X %X\n"
-			"LEVEL 3: %03X     R4 R5: %X %X  RC RD: %X %X\n"
-			"                 R6 R7: %X %X  RE RF: %X %X\n"
-			"\n"
-			"ACCUMULATOR: %X     CARRY: %X  TEST: %X\n"
-			"PC: %03X            CYCLES: %ld\n"
-		 	, c->STACK.addrs[0], c->IR[0x0], c->IR[0x1], c->IR[0x8], c->IR[0x9],
-			  c->STACK.addrs[1], c->IR[0x2], c->IR[0x3], c->IR[0xA], c->IR[0xB],
-			  c->STACK.addrs[2], c->IR[0x4], c->IR[0x5], c->IR[0xC], c->IR[0xD],
-			  c->IR[0x6], c->IR[0x7], c->IR[0xE], c->IR[0xF], 
-			  c->ACC, c->carry, c->test,
-			  c->PC, cycle);
-
-	/*
-	 * 
-			"\n"
-			"    STACK             INDEX REGISTERS              RAM BANK: 0  RAM CHIP: 0              STATUS\n"
+			"    STACK             INDEX REGISTERS              RAM BANK: %d  RAM CHIP: %d              STATUS\n"
 			"LEVEL 1: %03X     R0 R1: %X %X  R8 R9: %X %X               0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3\n"
 			"LEVEL 2: %03X     R2 R3: %X %X  RA RB: %X %X\n"
 			"LEVEL 3: %03X     R4 R5: %X %X  RC RD: %X %X   REGISTER 0: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
@@ -96,5 +86,16 @@ void cli_main_view(chip_4004 *c, uint64_t cycle){
 			"                                          REGISTER 2: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
 			"ACCUMULATOR: %X     CARRY: %X  TEST: %X      REGISTER 3: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
 			"PC: %03X            CYCLES: %ld\n"
-	 * */
+		 	, 
+			  bank, chip,
+			  c->STACK.addrs[0], c->IR[0x0], c->IR[0x1], c->IR[0x8], c->IR[0x9],
+			  c->STACK.addrs[1], c->IR[0x2], c->IR[0x3], c->IR[0xA], c->IR[0xB],
+			  c->STACK.addrs[2], c->IR[0x4], c->IR[0x5], c->IR[0xC], c->IR[0xD],  RAM(0),  RAM(1),  RAM(2),  RAM(3),  RAM(4),  RAM(5),  RAM(6),  RAM(7),  RAM(8),  RAM(9), RAM(10), RAM(11), RAM(12), RAM(13), RAM(14), RAM(15), RAM_STATUS(0), RAM_STATUS(1), RAM_STATUS(2), RAM_STATUS(3),
+			                     c->IR[0x6], c->IR[0x7], c->IR[0xE], c->IR[0xF], RAM(16), RAM(17), RAM(18), RAM(19), RAM(20), RAM(21), RAM(22), RAM(23), RAM(24), RAM(25), RAM(26), RAM(27), RAM(28), RAM(29), RAM(30), RAM(31), RAM_STATUS(4), RAM_STATUS(5), RAM_STATUS(6), RAM_STATUS(7),
+			                                                                     RAM(32), RAM(33), RAM(34), RAM(35), RAM(36), RAM(37), RAM(38), RAM(39), RAM(40), RAM(41), RAM(42), RAM(43), RAM(44), RAM(45), RAM(46), RAM(47), RAM_STATUS(8), RAM_STATUS(9), RAM_STATUS(10), RAM_STATUS(11),
+			  c->ACC, c->carry, c->test,                                         RAM(48), RAM(49), RAM(50), RAM(51), RAM(52), RAM(53), RAM(54), RAM(55), RAM(56), RAM(57), RAM(58), RAM(59), RAM(60), RAM(61), RAM(62), RAM(63), RAM_STATUS(12), RAM_STATUS(13), RAM_STATUS(14), RAM_STATUS(15),
+			  c->PC, cycle);
+#undef RAM
+#undef RAM_STATUS
+
 }

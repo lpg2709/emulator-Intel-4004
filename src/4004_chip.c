@@ -434,13 +434,13 @@ void opcode_dcl(chip_4004 *c){
 }
 
 void opcode_src(chip_4004 *c, uint8_t opa){
-	uint8_t IR_pair = (opa & 0x0F) >> 1;
-	c->RAM_addrs = ((c->IR[IR_pair]) << 4) || c->IR[IR_pair+1];
+	uint8_t IR_pair = (opa & 0x0E) >> 1;
+	c->RAM_addrs = ((c->IR[IR_pair] << 4) | c->IR[IR_pair+1]);
 	c->PC++;
 }
 
 void opcode_wrm(chip_4004 *c){
-	c->RAM[(c->RAM_addrs*c->RAM_bank)] = c->ACC;
+	c->RAM[c->RAM_addrs] = c->ACC;
 	c->PC++;
 }
 
@@ -470,7 +470,7 @@ void opcode_sbm(chip_4004 *c){
 }
 
 void opcode_rdm(chip_4004 *c){
-	c->ACC = c->RAM[(c->RAM_addrs*c->RAM_bank)];
+	c->ACC = c->RAM[(c->RAM_addrs)];
 	c->PC++;
 }
 
@@ -480,7 +480,7 @@ void opcode_rdr(chip_4004 *c){
 }
 
 void opcode_adm(chip_4004 *c){
-	c->ACC += c->RAM[(c->RAM_addrs*c->RAM_bank)] + c->carry;
+	c->ACC += c->RAM[(c->RAM_addrs)] + c->carry;
 	if(c->ACC & 0xF0){
 		c->ACC &= 0xF;
 		c->carry = true;
