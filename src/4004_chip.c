@@ -14,7 +14,7 @@ bool loadProgramROM(chip_4004 *c, uint8_t *program, long program_size){
 	return true;
 }
 
-void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
+uint32_t chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 	uint32_t cycle = 0;
 	uint16_t mOpcode;
 
@@ -182,6 +182,7 @@ void chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 		
 		cycle++;		
 	}
+	return cycle;
 }
 
 void chip_reset(chip_4004 *c){

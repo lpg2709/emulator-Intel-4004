@@ -34,7 +34,7 @@ struct sct_chip_4004{
 void init4004(chip_4004 *c);
 bool loadProgramROM(chip_4004 *c, uint8_t *program, long program_size);
 
-void chip_cycle(chip_4004 *c, uint32_t cycles_limit);
+uint32_t chip_cycle(chip_4004 *c, uint32_t cycles_limit);
 void chip_reset(chip_4004 *c); 		// Reset all chip
 
 

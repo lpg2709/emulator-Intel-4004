@@ -14,6 +14,7 @@ void cli_d_print_all_ram(chip_4004 *c);
 void cli_screen_usage();
 void cli_screen_startup();
 
-void cli_main_view(chip_4004 *c, uint64_t cycle);
+void cli_main_view(chip_4004 *c,int bank, int chip, uint64_t cycle);
+char cli_main_input();
 
 #endif

@@ -70,9 +70,8 @@ void cli_screen_startup(){
 			
 }
 
-void cli_main_view(chip_4004 *c, uint64_t cycle){
-	int bank, chip;
-	bank = chip = 0;
+void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
+	system("clear");
 
 #define RAM(index) c->RAM[index+(chip*63)+(bank*255)]
 #define RAM_STATUS(index) c->RAM_status[index+(chip*15)+(bank*63)]
@@ -97,5 +96,9 @@ void cli_main_view(chip_4004 *c, uint64_t cycle){
 			  c->PC, cycle);
 #undef RAM
 #undef RAM_STATUS
+}
 
+char cli_main_input(){
+	printf("\nACTIONS\n(n) next   (o) operations   (q) quit\n");
+	return getchar();
 }
