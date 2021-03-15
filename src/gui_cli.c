@@ -98,7 +98,3 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 #undef RAM_STATUS
 }
 
-char cli_main_input(){
-	printf("\nACTIONS\n(n) next   (o) operations   (q) quit\n");
-	return getchar();
-}
