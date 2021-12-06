@@ -1,6 +1,14 @@
 #include "./application.h"
 #include "4004_chip.h"
 
+uint32_t cicles_limit;
+uint32_t cicle;
+int c_bank;
+int c_chip;
+bool shound_run;
+bool animated_run;
+bool run;
+
 void application_init(){
 	cicles_limit = 0;
 	cicle = 0;
@@ -9,7 +17,7 @@ void application_init(){
 	shound_run = true;
 	animated_run = false;
 	run = false;
-	
+
 	cli_screen_startup();
 }
 
@@ -48,7 +56,7 @@ void application_main_loop(chip_4004 *c){
 			case 'q':
 				shound_run = false;
 				break;
-		
+
 		}
 	}
 
