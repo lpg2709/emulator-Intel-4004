@@ -6,7 +6,6 @@ const char* read_file(const char *path){
 	char *file_content;
 	if(f == NULL){
 		printf("Error: fail to open the file: %s\n", path);
-		getchar();
 		exit(1);
 	}
 
@@ -16,7 +15,6 @@ const char* read_file(const char *path){
 
 	if(file_size == 1){
 		printf("Error: no content on file: %s\n", path);
-		getchar();
 		exit(1);
 	}
 
@@ -27,10 +25,9 @@ const char* read_file(const char *path){
 
 	if(file_content == NULL){
 		printf("Error: fail to allocate memory for file content!\n");
-		getchar();
 		exit(1);
 	}
-	
+
 	fread(file_content, 1, file_size, f);
 
 	fclose(f);
@@ -44,7 +41,6 @@ const void *b_read_file(const char *path, long *bf_size){
 	const void *file_content;
 	if(f == NULL){
 		printf("Error: fail to open the file: %s\n", path);
-		getchar();
 		exit(1);
 	}
 
@@ -54,7 +50,6 @@ const void *b_read_file(const char *path, long *bf_size){
 
 	if(file_size == 1){
 		printf("Error: no content on file: %s\n", path);
-		getchar();
 		exit(1);
 	}
 
@@ -64,10 +59,9 @@ const void *b_read_file(const char *path, long *bf_size){
 
 	if(file_content == NULL){
 		printf("Error: fail to allocate memory for file content!\n");
-		getchar();
 		exit(1);
 	}
-	
+
 	fread((void*)file_content, 1, file_size, f);
 
 	fclose(f);
@@ -83,13 +77,11 @@ bool b_write_file(const char *path, const void *content, size_t size, size_t con
 
 	if(f == NULL){
 		printf("Error: fail to alloc memory for write file: %s\n", path);
-		getchar();
 		exit(1);
 	}
 
 	if( fwrite(content, size, content_size, f) != content_size){
 		printf("Error: fail to write file: %s\n", path);
-		getchar();
 		return false;
 	}
 
