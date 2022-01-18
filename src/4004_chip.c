@@ -28,16 +28,13 @@ uint32_t chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 			case 0x10:
 				opcode_jcn(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
 				cycle++;
-				break; 
+				break;
 			case 0x20:
-				switch(mOpcode & 0x0F){
-					case 0x00:
-						opcode_fim(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
-						cycle++;
-						break;
-					case 0x01:
-						opcode_src(c, mOpcode & 0x0F);
-						break;
+				if((mOpcode & 0x0F) % 2 == 0){
+					opcode_fim(c, (mOpcode << 8 | c->ROM[c->PC + 1]) & 0x0FFF);
+					cycle++;
+				}else{
+					opcode_src(c, mOpcode & 0x0F);
 				}
 				break;
 			case 0x30:
@@ -141,16 +138,16 @@ uint32_t chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 						opcode_wrr(c);
 						break;
 					case 0x4:
-						opcode_wrN(c, (uint8_t)0x04);
+						opcode_wrN(c, (uint8_t)0x00);
 						break;
 					case 0x5:
-						opcode_wrN(c, (uint8_t)0x05);
+						opcode_wrN(c, (uint8_t)0x01);
 						break;
 					case 0x6:
-						opcode_wrN(c, (uint8_t)0x06);
+						opcode_wrN(c, (uint8_t)0x02);
 						break;
 					case 0x7:
-						opcode_wrN(c, (uint8_t)0x07);
+						opcode_wrN(c, (uint8_t)0x03);
 						break;
 					case 0x8:
 						opcode_sbm(c);
@@ -179,8 +176,8 @@ uint32_t chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 				}
 				break;
 		}
-		
-		cycle++;		
+
+		cycle++;
 	}
 	return cycle;
 }
@@ -214,7 +211,7 @@ void opcode_jcn(chip_4004 *c, uint16_t opa){
 	uint8_t addr = (opa & 0xFF) | (0xF << 8);
 
 	uint8_t acc_is_0 = (c->ACC == 0);
-	
+
 	if((!C1 && ((acc_is_0 && C2) || (c->carry && C3) || (!c->test && C4))) || (C1 && ((acc_is_0 || !C2) && (c->carry || C3) && (c->test || !C4))))
 		c->PC &= addr;
 	else
@@ -222,7 +219,7 @@ void opcode_jcn(chip_4004 *c, uint16_t opa){
 }
 
 void opcode_fim(chip_4004 *c, uint16_t opa){
-	uint8_t IR_pair = (opa & 0xE00) >> 8;	
+	uint8_t IR_pair = (opa & 0xE00) >> 8;
 	uint8_t rom_data = (opa & 0xFF);
 
 	c->IR[IR_pair] = (rom_data & 0xF0)>>4;
@@ -240,7 +237,7 @@ void opcode_fin(chip_4004 *c, uint8_t opa){
 }
 
 void opcode_jin(chip_4004 *c, uint8_t opa){
-	uint8_t IR_pair = (opa & 0xE);	
+	uint8_t IR_pair = (opa & 0xE);
 	c->PC  = (((c->PC + 1) % ROM_PAGE_SIZE == 1) ? ((c->PC+1) & 0xF00): (c->PC & 0xF00)) | (c->IR[IR_pair] << 4) | (c->IR[IR_pair + 1]);
 }
 
@@ -250,7 +247,7 @@ void opcode_jun(chip_4004 *c, uint16_t opa){
 
 void opcode_jms(chip_4004 *c, uint16_t opa){
 	c->STACK.addrs[c->STACK.SP] = c->PC;
-	c->STACK.SP == 2 ? c->STACK.SP = 0: c->STACK.SP++;	
+	c->STACK.SP == 2 ? c->STACK.SP = 0: c->STACK.SP++;
 	c->PC = (opa & 0XFFF);
 }
 
@@ -262,7 +259,7 @@ void opcode_inc(chip_4004 *c, uint8_t opa){
 void opcode_isz(chip_4004 *c, uint16_t opa){
 	uint8_t IR_addrs = (opa & 0xF00) >> 8;
 	uint8_t rom_addrs = (opa & 0xFF);
-	c->IR[IR_addrs]++;
+	c->IR[IR_addrs] = (c->IR[IR_addrs] + 1) & 0xF;
 	if(c->IR[IR_addrs] != 0)
 		c->PC  = (((c->PC + 1) % ROM_PAGE_SIZE == 1) ? ((c->PC+1) & 0xF00): (c->PC & 0xF00)) | (rom_addrs);
 	else
@@ -297,14 +294,16 @@ void opcode_ld(chip_4004 *c, uint8_t opa){
 }
 
 void opcode_xch(chip_4004 *c, uint8_t opa){
+	uint8_t aux = c->IR[(opa & 0xF)];
 	c->IR[(opa & 0xF)] = c->ACC;
+	c->ACC = aux;
 	c->PC++;
 }
 
 void opcode_bbl(chip_4004 *c, uint8_t opa){
 	c->ACC = (opa & 0xF);
 	c->PC = c->STACK.addrs[c->STACK.SP];
-	c->STACK.SP <= 0 ? c->STACK.SP = 0: c->STACK.SP--;	
+	c->STACK.SP <= 0 ? c->STACK.SP = 0: c->STACK.SP--;
 }
 
 void opcode_ldm(chip_4004 *c, uint8_t opa){
@@ -435,7 +434,7 @@ void opcode_dcl(chip_4004 *c){
 }
 
 void opcode_src(chip_4004 *c, uint8_t opa){
-	uint8_t IR_pair = (opa & 0x0E) >> 1;
+	uint8_t IR_pair = ((opa & 0x0E) >> 1) * 2;
 	c->RAM_addrs = ((c->IR[IR_pair] << 4) | c->IR[IR_pair+1]);
 	c->PC++;
 }
@@ -456,7 +455,9 @@ void opcode_wrr(chip_4004 *c){
 }
 
 void opcode_wrN(chip_4004 *c, uint8_t n){
-	c->RAM_status[(n*4 + c->RAM_bank)] = c->ACC &0x0F;
+	uint8_t s_register = ((c->RAM_addrs & 0xF0) >> 4) & 0x03;
+	uint8_t s_chip = (((c->RAM_addrs & 0xF0) >> 4) & 0x0C) >> 2;
+	c->RAM_status[((4 * s_register) + (16*s_chip) + n) * c->RAM_bank] = c->ACC &0x0F;
 	c->PC++;
 }
 

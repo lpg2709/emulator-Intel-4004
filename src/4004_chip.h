@@ -14,8 +14,8 @@ typedef struct sct_chip_4004 chip_4004;
 
 struct sct_chip_4004{
 	uint8_t IR[16];               // On 4004 the index registers are 4 bits not 8
-	uint8_t ROM[4096];	
-	uint8_t RAM[2048];             // 8 banks, one bank have 4 chips, one chip have 64 characters of 4bits
+	uint8_t ROM[4096];
+	uint8_t RAM[2048];            // 8 banks, one bank have 4 chips, one chip have 64 characters of 4bits
 	uint8_t RAM_status[128];      // 8 banks, one bank have 4 chips, one chip have 16 status charactes
 	uint8_t RAM_bank;
 	uint8_t RAM_addrs;
@@ -76,7 +76,7 @@ void opcode_wrm(chip_4004 *c);					// 0xE0
 void opcode_wmp(chip_4004 *c);                  // 0xE1
 void opcode_wrr(chip_4004 *c);                  // 0xE2
 void opcode_wrN(chip_4004 *c, uint8_t n);       // 0xE4--0xE7
-/* 
+/*
  * wr0  -  wr1 -  wr2 -  wr3
  * 0xE4 - 0xE5 - 0xE6 - 0xE7
  */
@@ -85,7 +85,7 @@ void opcode_rdm(chip_4004 *c);                  // 0xE9
 void opcode_rdr(chip_4004 *c);                  // 0xEA
 void opcode_adm(chip_4004 *c);                  // 0xEB
 void opcode_rdN(chip_4004 *c, uint8_t n);       // 0xEC--0xEF
-/* 
+/*
  * rd0  -  rd1 -  rd2 -  rd3
  * 0xEC - 0xED - 0xEE - 0xEF
  */

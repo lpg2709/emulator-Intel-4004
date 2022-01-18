@@ -5,21 +5,21 @@ void cli_d_print_rom_memory(chip_4004 *c){
 	int i;
 	for(i = 0; i < 4096; i++){
 		if(i%32 == 0 && i != 0)
-			printf("\n");	
+			printf("\n");
 		printf("%02X ", c->ROM[i]);
 	}
 	printf("\n-----------------------------------------------------------------------------------------------\n");
 }
 
 void cli_d_print_all_ram(chip_4004 *c){
-	int i, j,bank, chip;
-	
+	int i, j, k,bank, chip;
+
 	printf("------------------------------------------ RAM MEMORY -----------------------------------------\n");
 	bank=chip=j=0;
 	for(i = 0; i < 2048; i++){
 		if(i == 0 || i%64 == 0){
 			printf("\n\n              BANK: %d CHIP: %d              \n", bank, chip);
-			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F");
+			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3");
 		}
 		if(i%64 == 0){
 			chip++;
@@ -29,6 +29,10 @@ void cli_d_print_all_ram(chip_4004 *c){
 			}
 		}
 		if(i%16 == 0){
+			printf(" | ");
+			for(k = 0; k < 4; k++){
+				printf("%X ", c->RAM[k + (j*4)+((chip*15)+(bank*63))]);
+			}
 			printf("\n");
 			if(j > 3)
 				j = 0;
@@ -42,7 +46,23 @@ void cli_d_print_all_ram(chip_4004 *c){
 }
 
 void cli_screen_usage(){
-
+	printf(
+		"Usage: 4004-emulator [OPTIONS]\n"
+		"Simple emulator of the Intel 4004 chip.\n"
+		"Intel 4004 is a 4-bit CPU released by Intel in 1971, which was the \n"
+		"  first commercial programmable microprocessor.\n"
+		"\n"
+		"Options:\n"
+		"-rf, --rom-file        Path to the ROM file.\n"
+		"-sf, --source-file     Path to the source file.\n"
+		"-of, --output-file     Path to the source file.\n"
+		"-a,  --assembler       Use the assembler of 4004-emulator to generate\n"
+		"                         te binary file.\n"
+		"-d,  --disassembler    Use the disassembler of 4004-emulator to\n"
+		"                         generate the reverse opcodes of a binary file.\n"
+		"     --help            Display this help and exit.\n"
+		"     --version         Output version information and exit\n"
+	);
 }
 
 void cli_screen_startup(){
@@ -67,14 +87,15 @@ void cli_screen_startup(){
 		if(c == '\n')
 			break;
 	}
-			
+
 }
 
 void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 	system("clear");
+#define RAM(index) c->RAM[index+(chip*64)+(bank*256)]
+#define RAM_STATUS(index) c->RAM_status[index+(chip*16)+(bank*64)]
 
-#define RAM(index) c->RAM[index+(chip*63)+(bank*255)]
-#define RAM_STATUS(index) c->RAM_status[index+(chip*15)+(bank*63)]
+#if UI_OVERFLOW_80_CHARS
 	printf(
 			"\n"
 			"    STACK             INDEX REGISTERS              RAM BANK: %d  RAM CHIP: %d              STATUS\n"
@@ -85,7 +106,8 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 			"                                          REGISTER 2: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
 			"ACCUMULATOR: %X     CARRY: %X  TEST: %X      REGISTER 3: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
 			"PC: %03X            CYCLES: %ld\n"
-		 	, 
+			"->: %.2X %.2X\n"
+		 	,
 			  bank, chip,
 			  c->STACK.addrs[0], c->IR[0x0], c->IR[0x1], c->IR[0x8], c->IR[0x9],
 			  c->STACK.addrs[1], c->IR[0x2], c->IR[0x3], c->IR[0xA], c->IR[0xB],
@@ -93,7 +115,40 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 			                     c->IR[0x6], c->IR[0x7], c->IR[0xE], c->IR[0xF], RAM(16), RAM(17), RAM(18), RAM(19), RAM(20), RAM(21), RAM(22), RAM(23), RAM(24), RAM(25), RAM(26), RAM(27), RAM(28), RAM(29), RAM(30), RAM(31), RAM_STATUS(4), RAM_STATUS(5), RAM_STATUS(6), RAM_STATUS(7),
 			                                                                     RAM(32), RAM(33), RAM(34), RAM(35), RAM(36), RAM(37), RAM(38), RAM(39), RAM(40), RAM(41), RAM(42), RAM(43), RAM(44), RAM(45), RAM(46), RAM(47), RAM_STATUS(8), RAM_STATUS(9), RAM_STATUS(10), RAM_STATUS(11),
 			  c->ACC, c->carry, c->test,                                         RAM(48), RAM(49), RAM(50), RAM(51), RAM(52), RAM(53), RAM(54), RAM(55), RAM(56), RAM(57), RAM(58), RAM(59), RAM(60), RAM(61), RAM(62), RAM(63), RAM_STATUS(12), RAM_STATUS(13), RAM_STATUS(14), RAM_STATUS(15),
-			  c->PC, cycle);
+			  c->PC, cycle, c->ROM[c->PC], c->ROM[c->PC + 1]);
+#else
+	printf(
+			"\n"
+			"    STACK             INDEX REGISTERS\n"
+			"LEVEL 1: %03X     R0 R1: %X %X  R8 R9: %X %X\n"
+			"LEVEL 2: %03X     R2 R3: %X %X  RA RB: %X %X\n"
+			"LEVEL 3: %03X     R4 R5: %X %X  RC RD: %X %X\n"
+			"                 R6 R7: %X %X  RE RF: %X %X\n"
+			"\n"
+			"         RAM BANK: %d  RAM CHIP: %d              STATUS\n"
+			"            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3\n"
+			"REGISTER 0: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
+			"REGISTER 1: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
+			"REGISTER 2: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
+			"REGISTER 3: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
+			"\n"
+			"ACCUMULATOR: %X     CARRY: %X  TEST: %X\n"
+			"PC: %03X            CYCLES: %ld\n"
+			"->: %.2X %.2X\n"
+		 	,
+			  c->STACK.addrs[0], c->IR[0x0], c->IR[0x1], c->IR[0x8], c->IR[0x9],
+			  c->STACK.addrs[1], c->IR[0x2], c->IR[0x3], c->IR[0xA], c->IR[0xB],
+			  c->STACK.addrs[2], c->IR[0x4], c->IR[0x5], c->IR[0xC], c->IR[0xD],
+			                     c->IR[0x6], c->IR[0x7], c->IR[0xE], c->IR[0xF],
+			  bank, chip,
+			  RAM(0),  RAM(1),  RAM(2),  RAM(3),  RAM(4),  RAM(5),  RAM(6),  RAM(7),  RAM(8),  RAM(9), RAM(10), RAM(11), RAM(12), RAM(13), RAM(14), RAM(15), RAM_STATUS(0), RAM_STATUS(1), RAM_STATUS(2), RAM_STATUS(3),
+			  RAM(16), RAM(17), RAM(18), RAM(19), RAM(20), RAM(21), RAM(22), RAM(23), RAM(24), RAM(25), RAM(26), RAM(27), RAM(28), RAM(29), RAM(30), RAM(31), RAM_STATUS(4), RAM_STATUS(5), RAM_STATUS(6), RAM_STATUS(7),
+			  RAM(32), RAM(33), RAM(34), RAM(35), RAM(36), RAM(37), RAM(38), RAM(39), RAM(40), RAM(41), RAM(42), RAM(43), RAM(44), RAM(45), RAM(46), RAM(47), RAM_STATUS(8), RAM_STATUS(9), RAM_STATUS(10), RAM_STATUS(11),
+			  RAM(48), RAM(49), RAM(50), RAM(51), RAM(52), RAM(53), RAM(54), RAM(55), RAM(56), RAM(57), RAM(58), RAM(59), RAM(60), RAM(61), RAM(62), RAM(63), RAM_STATUS(12), RAM_STATUS(13), RAM_STATUS(14), RAM_STATUS(15),
+			  c->ACC, c->carry, c->test,
+			  c->PC, cycle, c->ROM[c->PC], c->ROM[c->PC + 1]);
+#endif
+
 #undef RAM
 #undef RAM_STATUS
 }
