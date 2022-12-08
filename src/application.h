@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 #include "./4004_chip.h"
+#include "./assambler.h"
 #include "./gui_cli.h"
 #include "./options_parser.h"
 #include "./files.h"
