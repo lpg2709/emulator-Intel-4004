@@ -1,7 +1,7 @@
 #include "files.h"
 
-const char* read_file(const char *path){
-	FILE *f = fopen(path, "r");
+const char* read_file(const char *path, long *f_size){
+	FILE *f = fopen(path, TEXT_READ_FILE);
 	long file_size = 0;
 	char *file_content;
 	if(f == NULL){
@@ -32,6 +32,7 @@ const char* read_file(const char *path){
 
 	fclose(f);
 
+	*f_size = file_size;
 	return file_content;
 }
 
