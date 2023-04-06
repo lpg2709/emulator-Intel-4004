@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 enum token_type {
 	OPCODE, OPERAND, NUMBER, HEX, COMMENT
@@ -19,6 +20,6 @@ struct sct_token {
 };
 
 token new_token(enum token_type t, uint16_t l, uint8_t ib, char le[5]);
-char* token_string(token t);
+void print_token(token t);
 
 #endif

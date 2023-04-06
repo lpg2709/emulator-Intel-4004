@@ -1,36 +1,38 @@
 #include "./a_scanner.h"
-#include "a_token.h"
+#include "./a_token.h"
+#include <string.h>
 
-token* scan_tokens(const char *source){
-	strcpy((char*) source, scanner.source);
-	memset((void*) scanner.tokens, 0, sizeof(token));
-	scanner.start = 0;
-	scanner.current = 0;
-	scanner.current_token = 0;
-	scanner.line = 1;
+token* scan_tokens(scanner *scan, const char *source, long source_size){
+	scan->source = (char *) malloc(sizeof(char) * source_size);
+	memcpy(scan->source, source, source_size);
+	memset((void*) scan->tokens, 0, sizeof(token) * 16384);
+	scan->start = 0;
+	scan->current = 0;
+	scan->current_token = 0;
+	scan->line = 1;
 
-	while(source[scanner.current] != EOF) {
-		scanner.start = scanner.current;
-		scan_token();
+	while(source[scan->current] != EOF) {
+		scan->start = scan->current;
+		scan_token(scan);
 	}
 
-	scanner.tokens[scanner.current_token] = new_token(EOF, scanner.line, 0, "\n");
+	scan->tokens[scan->current_token] = new_token(EOF, scan->line, 0, "\n");
 
-	return scanner.tokens;
+	return scan->tokens;
 }
 
-void scan_token(){
-	char c = advance();
+void scan_token(scanner *scan){
+	char c = advance(scan);
 	switch(c) {
 		case ';':
-			while(advance() != '\n');
+			while(advance(scan) != '\n');
 			break;
 		case ' ':
 		case '\r':
 		case '\t':
 			break;
 		case '\n':
-			scanner.line++;
+			scan->line++;
 			break;
 		default:
 			// check if is digit or string/instruction
@@ -38,9 +40,9 @@ void scan_token(){
 	}
 }
 
-char advance() {
-	scanner.current++;
-	return scanner.source[scanner.current - 1];
+char advance(scanner *scan) {
+	scan->current++;
+	return scan->source[scan->current - 1];
 }
 
 bool is_digit(char c){

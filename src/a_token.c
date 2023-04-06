@@ -1,17 +1,16 @@
 #include "./a_token.h"
+#include <inttypes.h>
 
 token new_token(enum token_type t, uint16_t l, uint8_t ib, char *le){
 	token token;
 	token.type = t;
 	token.line = l;
 	token.in_bytes = ib;
-	strcpy(le, token.lexeme);
+	strcpy(token.lexeme, le);
 	return token;
 }
 
-char* token_string(token t) {
-	char* fs;
-	sprintf(fs, "Type: %d  Line: %d  InByte: %X  Lexame: %s",
+void print_token(token t) {
+	printf("Type: %d  Line: %" PRIu32 "  InByte: %" PRIu8 "  Lexame: %s",
 			t.type, t.line, t.in_bytes, t.lexeme);
-	return fs;
 }
