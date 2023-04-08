@@ -16,6 +16,7 @@ struct sct_scanner {
 	uint32_t start;
 	uint32_t current;
 	uint32_t line;
+	long source_size;
 };
 
 token* scan_tokens(scanner *scan, const char* source, long source_size);

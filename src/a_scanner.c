@@ -10,6 +10,7 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 	scan->current = 0;
 	scan->current_token = 0;
 	scan->line = 1;
+	scan->source_size = source_size;
 
 	while(source[scan->current] != EOF) {
 		scan->start = scan->current;
@@ -35,6 +36,42 @@ void scan_token(scanner *scan){
 			scan->line++;
 			break;
 		default:
+			if(is_digit(c)){
+				while((scan->current < scan->source_size) && is_digit(c)) {
+					c = advance(scan);
+				}
+
+				// TODO: handle registers pairs
+				if(is_alpha(c)) {
+					break;
+				}
+				char lexame[5];
+				int i, j = 0;
+				for(i = scan->start; i < scan->current; i++) {
+					if(j < 5) {
+						lexame[j] = scan->source[i];
+						j++;
+					}
+				}
+
+				scan->tokens[scan->current_token] = new_token(NUMBER, scan->line, 0, lexame);
+				scan->current_token++;
+			} else if(is_alpha(c)) {
+				while((scan->current < scan->source_size) && is_alpha(c)) {
+					c = advance(scan);
+				}
+				char lexame[5];
+				int i, j = 0;
+				for(i = scan->start; i < scan->current; i++) {
+					if(j < 4) {
+						lexame[j] = scan->source[i];
+						j++;
+					}
+				}
+				lexame[j++] = '\0';
+				scan->tokens[scan->current_token] = new_token(OPCODE, scan->line, 0, lexame);
+				scan->current_token++;
+			}
 			// check if is digit or string/instruction
 			break;
 	}
