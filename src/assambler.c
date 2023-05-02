@@ -25,8 +25,12 @@ void parser(const char* source_path) {
 	token *tokens;
 	scanner s;
 
-	tokens = scan_tokens(&s, source, f_size);
+	scan_tokens(&s, source, f_size);
 
-	print_token(tokens[0]);
+	int i = 0;
+	while (s.tokens[i].type != EOF) {
+		print_token(s.tokens[i]);
+		i++;
+	}
 }
 

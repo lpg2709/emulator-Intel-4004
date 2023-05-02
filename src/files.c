@@ -18,8 +18,6 @@ const char* read_file(const char *path, long *f_size){
 		exit(1);
 	}
 
-	fseek(f, 0, SEEK_SET);
-
 	file_content = (char *) malloc(sizeof(char)*(file_size+1));
 
 
@@ -31,6 +29,8 @@ const char* read_file(const char *path, long *f_size){
 	fread(file_content, 1, file_size, f);
 
 	fclose(f);
+
+	file_content[file_size] = '\0';
 
 	*f_size = file_size;
 	return file_content;

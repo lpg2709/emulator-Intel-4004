@@ -12,7 +12,7 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 	scan->line = 1;
 	scan->source_size = source_size;
 
-	while(source[scan->current] != EOF) {
+	while(source[scan->current] != '\n') {
 		scan->start = scan->current;
 		scan_token(scan);
 	}
@@ -27,6 +27,7 @@ void scan_token(scanner *scan){
 	switch(c) {
 		case ';':
 			while(advance(scan) != '\n');
+			scan->line++;
 			break;
 		case ' ':
 		case '\r':
@@ -37,14 +38,18 @@ void scan_token(scanner *scan){
 			break;
 		default:
 			if(is_digit(c)){
+				// TODO: FIX when is new line
 				while((scan->current < scan->source_size) && is_digit(c)) {
 					c = advance(scan);
 				}
 
 				// TODO: handle registers pairs
 				if(is_alpha(c)) {
-					break;
+					if (c != 'p' && c != 'P') {
+						printf("TODO: Invalid register pair identifier on line: %d", scan->line);
+					}
 				}
+
 				char lexame[5];
 				int i, j = 0;
 				for(i = scan->start; i < scan->current; i++) {
@@ -53,6 +58,7 @@ void scan_token(scanner *scan){
 						j++;
 					}
 				}
+				lexame[j++] = '\0';
 
 				scan->tokens[scan->current_token] = new_token(NUMBER, scan->line, 0, lexame);
 				scan->current_token++;
