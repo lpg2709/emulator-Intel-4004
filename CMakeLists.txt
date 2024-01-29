@@ -1,21 +1,26 @@
 cmake_minimum_required(VERSION 3.2)
+project(4004-emulator C)
 
-set(project_name 4004-emulator)
+set (CMAKE_C_STANDARD 99)
 set(src_folder "src/")
 
-project(${project_name})
-
-if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -Wpedantic -std=c99")
-    if(NOT WIN32)
-        set(GLAD_LIBRARIES dl)
-    endif()
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
+if(MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
+else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c99")
+endif()
 
-file(GLOB SOURCES ${src_folder}/*.c)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/roms DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(GLOB PROJECT_SOURCES ${src_folder}/*.c)
+file(GLOB PROJECT_HEADERS ${src_folder}/*.h)
 
-add_executable(${project_name} main.c ${SOURCES})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/roms DESTINATION ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+
