@@ -7,11 +7,13 @@
 #include <stdlib.h>
 #include "./a_token.h"
 
+#define MAX_TOKENS 16384
+
 typedef struct sct_scanner scanner;
 
 struct sct_scanner {
 	char* source;
-	token tokens[16384];
+	token tokens[MAX_TOKENS];
 	uint16_t current_token;
 	uint32_t start;
 	uint32_t current;
@@ -22,6 +24,7 @@ struct sct_scanner {
 token* scan_tokens(scanner *scan, const char* source, long source_size);
 void scan_token(scanner *scan);
 
+char next_char(scanner *scan);
 char advance(scanner *scan);
 bool is_digit(char c);
 bool is_alpha(char c);

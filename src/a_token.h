@@ -7,7 +7,9 @@
 #include <stdlib.h>
 
 enum token_type {
-	OPCODE, OPERAND, NUMBER, HEX, COMMENT
+	OPCODE, OPERAND, NUMBER, HEX, COMMENT,
+	T_EOF,
+	TOKEN_TYPE_LEN
 };
 
 typedef struct sct_token token;

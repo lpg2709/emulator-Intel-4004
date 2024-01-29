@@ -5,19 +5,19 @@
 token* scan_tokens(scanner *scan, const char *source, long source_size){
 	scan->source = (char *) malloc(sizeof(char) * source_size);
 	memcpy(scan->source, source, source_size);
-	memset((void*) scan->tokens, 0, sizeof(token) * 16384);
+	memset((void*) scan->tokens, 0, sizeof(token) * MAX_TOKENS);
 	scan->start = 0;
 	scan->current = 0;
 	scan->current_token = 0;
 	scan->line = 1;
 	scan->source_size = source_size;
 
-	while(source[scan->current] != '\n') {
+	while(source[scan->current] != '\0' && scan->current_token < MAX_TOKENS) {
 		scan->start = scan->current;
 		scan_token(scan);
 	}
 
-	scan->tokens[scan->current_token] = new_token(EOF, scan->line, 0, "\n");
+	scan->tokens[scan->current_token] = new_token(T_EOF, scan->line, 0, "\n");
 
 	return scan->tokens;
 }
@@ -51,8 +51,9 @@ void scan_token(scanner *scan){
 				}
 
 				char lexame[5];
-				int i, j = 0;
-				for(i = scan->start; i < scan->current; i++) {
+				uint32_t i;
+				uint8_t j = 0;
+				for(i = scan->start; i < scan->current - 1; i++) {
 					if(j < 5) {
 						lexame[j] = scan->source[i];
 						j++;
@@ -62,13 +63,17 @@ void scan_token(scanner *scan){
 
 				scan->tokens[scan->current_token] = new_token(NUMBER, scan->line, 0, lexame);
 				scan->current_token++;
+				if(c == '\n')
+					scan->line++;
 			} else if(is_alpha(c)) {
-				while((scan->current < scan->source_size) && is_alpha(c)) {
+				while((scan->current < scan->source_size) && is_alpha_numeric(c)) {
 					c = advance(scan);
 				}
+
 				char lexame[5];
-				int i, j = 0;
-				for(i = scan->start; i < scan->current; i++) {
+				uint32_t i;
+				uint8_t j = 0;
+				for(i = scan->start; i < scan->current - 1; i++) {
 					if(j < 4) {
 						lexame[j] = scan->source[i];
 						j++;
@@ -77,6 +82,8 @@ void scan_token(scanner *scan){
 				lexame[j++] = '\0';
 				scan->tokens[scan->current_token] = new_token(OPCODE, scan->line, 0, lexame);
 				scan->current_token++;
+				if(c == '\n')
+					scan->line++;
 			}
 			// check if is digit or string/instruction
 			break;
@@ -84,8 +91,9 @@ void scan_token(scanner *scan){
 }
 
 char advance(scanner *scan) {
+	char c = scan->source[scan->current];
 	scan->current++;
-	return scan->source[scan->current - 1];
+	return c;
 }
 
 bool is_digit(char c){

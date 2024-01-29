@@ -17,18 +17,20 @@ void append_mnemonic(char m[3], char c) {
 }
 
 uint8_t opcode_to_hex(const char* opcode) {
+	// TODO: Compleat function
+	return opcode[0];
 }
 
 void parser(const char* source_path) {
 	long f_size;
 	const char* source = read_file(source_path, &f_size);
-	token *tokens;
+	// token *tokens;
 	scanner s;
 
 	scan_tokens(&s, source, f_size);
 
 	int i = 0;
-	while (s.tokens[i].type != EOF) {
+	while (s.tokens[i].type != T_EOF) {
 		print_token(s.tokens[i]);
 		i++;
 	}
