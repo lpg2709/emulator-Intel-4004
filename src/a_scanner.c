@@ -43,12 +43,8 @@ void scan_token(scanner *scan){
 				enum token_type tt = TOKEN_TYPE_NUMBER;
 
 				if(isalpha(c)) {
-					if (c != 'p' && c != 'P') {
-						printf("TODO: Invalid register pair identifier on line: %d", scan->line);
-						break;
-					} else {
-						tt = TOKEN_TYPE_REGISTER_PAIR;
-					}
+					assert(!(c != 'p' && c != 'P')); // TODO: how report this????
+					tt = TOKEN_TYPE_REGISTER_PAIR;
 				}
 
 				char lexame[5];
@@ -81,7 +77,6 @@ void scan_token(scanner *scan){
 				if(c == '\n')
 					scan->line++;
 			}
-			// check if is digit or string/instruction
 			break;
 	}
 }
@@ -93,8 +88,7 @@ char advance(scanner *scan) {
 }
 
 bool get_lexame(char *lexam, scanner *scan) {
-	if( (scan->current - scan->start) > 5 )
-		return false;
+	assert(scan->current - scan->start);
 
 	uint32_t i = 0;
 	uint8_t j = 0;
