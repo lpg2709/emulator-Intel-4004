@@ -20,7 +20,7 @@ bool  options_parser(int argc, char **argv, Options *opt){
 
 		if(strcmp(o, "--output-file") == 0 || strcmp(o, "-of") == 0){
 			i++;
-			strcpy(opt->source_file_path, (const char*) argv[i]);
+			strcpy(opt->output_file_path, (const char*) argv[i]);
 		}
 
 		if(strcmp(o, "--assembler") == 0 || strcmp(o, "-a") == 0){
