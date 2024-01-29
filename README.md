@@ -52,7 +52,7 @@ Brief history of the Intel 4004. [Intel's First Microprocessor](https://www.inte
 
 [4004 Datasheet](https://datasheet4u.com/datasheet-pdf/Intel/4004/pdf.php?id=787753)*
 
-[MCS-4 Assembly Language Programming Manual - December 1973](http://www.nj7p.org/Manuals/PDFs/Intel/MCS-4_ALPM_Dec73.pdf)*
+[MCS-4 Assembly Language Programming Manual - December 1973](https://archive.org/details/bitsavers_intelMCS4MProgrammingManualDec73_5215098)*
 
 Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.szyc.org/)
 
