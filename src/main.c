@@ -3,11 +3,11 @@
 #include <stdbool.h>
 
 
-#include "./src/4004_chip.h"
-#include "./src/files.h"
-#include "./src/gui_cli.h"
-#include "./src/application.h"
-#include "./src/options_parser.h"
+#include "4004_chip.h"
+#include "files.h"
+#include "gui_cli.h"
+#include "application.h"
+#include "options_parser.h"
 
 int main(int argc, char **argv){
 	Options options;
