@@ -1,12 +1,12 @@
 ; From: Leonardo Padilha Guarezi
 ; Test the write values into status character of DATA RAM
 
-init
+init,
 	FIM R0R1, 0    ; initialize R0=R1=0
 	FIM R2R3, 0    ; initialize R2=R3=0
 	LDM 12         ; load 12 to accumulator
 	XCH R2         ; initialize R2=12
-loop
+loop,
 	SRC R0R1       ; select register & address
 	WR0            ; write status character 0
 	IAC            ; increment accumulator

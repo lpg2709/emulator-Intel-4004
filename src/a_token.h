@@ -7,8 +7,13 @@
 #include <stdlib.h>
 
 enum token_type {
-	OPCODE, OPERAND, NUMBER, HEX, COMMENT,
-	T_EOF,
+	TOKEN_TYPE_TEXT,  // Everythin, can change after scanner
+	TOKEN_TYPE_LABEL, // End with comma and the first 3 chars need to be unique.
+	TOKEN_TYPE_OPCODE,
+	TOKEN_TYPE_NUMBER,
+	TOKEN_TYPE_REGISTER,      // R1 R2 ... Rnscanne
+	TOKEN_TYPE_REGISTER_PAIR, // P0 P1 ... Pn
+	TOKEN_TYPE_EOF,
 	TOKEN_TYPE_LEN
 };
 

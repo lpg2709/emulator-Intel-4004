@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include <stdlib.h>
+
 #include "./a_token.h"
 
 #define MAX_TOKENS 16384
@@ -26,8 +28,6 @@ void scan_token(scanner *scan);
 
 char next_char(scanner *scan);
 char advance(scanner *scan);
-bool is_digit(char c);
-bool is_alpha(char c);
-bool is_alpha_numeric(char c);
+bool get_lexame(char *lexam, scanner *scan);
 
 #endif

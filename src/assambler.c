@@ -30,7 +30,7 @@ void parser(const char* source_path) {
 	scan_tokens(&s, source, f_size);
 
 	int i = 0;
-	while (s.tokens[i].type != T_EOF) {
+	while (s.tokens[i].type != TOKEN_TYPE_EOF) {
 		print_token(s.tokens[i]);
 		i++;
 	}

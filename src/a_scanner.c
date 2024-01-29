@@ -1,6 +1,4 @@
 #include "./a_scanner.h"
-#include "./a_token.h"
-#include <string.h>
 
 token* scan_tokens(scanner *scan, const char *source, long source_size){
 	scan->source = (char *) malloc(sizeof(char) * source_size);
@@ -17,7 +15,7 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 		scan_token(scan);
 	}
 
-	scan->tokens[scan->current_token] = new_token(T_EOF, scan->line, 0, "\n");
+	scan->tokens[scan->current_token] = new_token(TOKEN_TYPE_EOF, scan->line, 0, "\n");
 
 	return scan->tokens;
 }
@@ -37,50 +35,48 @@ void scan_token(scanner *scan){
 			scan->line++;
 			break;
 		default:
-			if(is_digit(c)){
-				// TODO: FIX when is new line
-				while((scan->current < scan->source_size) && is_digit(c)) {
+			if(isdigit(c)){
+				while((scan->current < scan->source_size) && isdigit(c)) {
 					c = advance(scan);
 				}
 
-				// TODO: handle registers pairs
-				if(is_alpha(c)) {
+				enum token_type tt = TOKEN_TYPE_NUMBER;
+
+				if(isalpha(c)) {
 					if (c != 'p' && c != 'P') {
 						printf("TODO: Invalid register pair identifier on line: %d", scan->line);
+						break;
+					} else {
+						tt = TOKEN_TYPE_REGISTER_PAIR;
 					}
 				}
 
 				char lexame[5];
-				uint32_t i;
-				uint8_t j = 0;
-				for(i = scan->start; i < scan->current - 1; i++) {
-					if(j < 5) {
-						lexame[j] = scan->source[i];
-						j++;
-					}
-				}
-				lexame[j++] = '\0';
+				get_lexame(lexame, scan);
 
-				scan->tokens[scan->current_token] = new_token(NUMBER, scan->line, 0, lexame);
+				scan->tokens[scan->current_token] = new_token(tt, scan->line, 0, lexame);
 				scan->current_token++;
 				if(c == '\n')
 					scan->line++;
-			} else if(is_alpha(c)) {
-				while((scan->current < scan->source_size) && is_alpha_numeric(c)) {
+			} else if(isalpha(c)) {
+				enum token_type tt = TOKEN_TYPE_OPCODE;
+				bool maybeRegister = false;
+				if(c == 'R' || c == 'r')
+					maybeRegister = true;
+
+				while((scan->current < scan->source_size) && isalnum(c)) {
 					c = advance(scan);
 				}
 
+				if((scan->current - scan->start < 2) && isdigit(c) && maybeRegister)
+					tt = TOKEN_TYPE_REGISTER;
+
 				char lexame[5];
-				uint32_t i;
-				uint8_t j = 0;
-				for(i = scan->start; i < scan->current - 1; i++) {
-					if(j < 4) {
-						lexame[j] = scan->source[i];
-						j++;
-					}
-				}
-				lexame[j++] = '\0';
-				scan->tokens[scan->current_token] = new_token(OPCODE, scan->line, 0, lexame);
+				get_lexame(lexame, scan);
+
+				if(c == ',')
+					tt = TOKEN_TYPE_LABEL;
+				scan->tokens[scan->current_token] = new_token(tt, scan->line, 0, lexame);
 				scan->current_token++;
 				if(c == '\n')
 					scan->line++;
@@ -96,14 +92,19 @@ char advance(scanner *scan) {
 	return c;
 }
 
-bool is_digit(char c){
-	return c >= '0' && c <= '9';
-}
+bool get_lexame(char *lexam, scanner *scan) {
+	if( (scan->current - scan->start) > 5 )
+		return false;
 
-bool is_alpha(char c) {
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
-}
+	uint32_t i = 0;
+	uint8_t j = 0;
+	for(i = scan->start; i < scan->current - 1; i++) {
+		if(j < 4) {
+			lexam[j] = scan->source[i];
+			j++;
+		}
+	}
+	lexam[j++] = '\0';
 
-bool is_alpha_numeric(char c){
-	return is_alpha(c) || is_digit(c);
+	return true;
 }
