@@ -15,11 +15,11 @@
 typedef struct sct_scanner scanner;
 
 struct sct_scanner {
-	char* source;
+	const char* source;
 	token tokens[MAX_TOKENS];
 	uint16_t current_token;
-	uint32_t start;
-	uint32_t current;
+	char *start;
+	char *current;
 	uint32_t line;
 	long source_size;
 };

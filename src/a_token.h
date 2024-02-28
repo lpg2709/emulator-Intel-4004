@@ -23,10 +23,11 @@ struct sct_token {
 	enum token_type type;
 	uint32_t line;
 	uint8_t in_bytes;
-	char lexeme[5];
+	char *lex;
+	uint32_t lex_size;
 };
 
-token new_token(enum token_type t, uint16_t l, uint8_t ib, char le[5]);
+token new_token(enum token_type t, uint16_t l, uint8_t ib, char *lex, uint32_t lex_size);
 void print_token(token t);
 
 #endif

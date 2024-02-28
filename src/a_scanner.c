@@ -1,21 +1,24 @@
 #include "./a_scanner.h"
 
+static bool isAtEnd(scanner *scan) {
+	return *scan->current == '\0';
+}
+
 token* scan_tokens(scanner *scan, const char *source, long source_size){
-	scan->source = (char *) malloc(sizeof(char) * source_size);
-	memcpy(scan->source, source, source_size);
-	memset((void*) scan->tokens, 0, sizeof(token) * MAX_TOKENS);
-	scan->start = 0;
-	scan->current = 0;
+	scan->source = source;
+	scan->source_size = source_size;
+	scan->current = (char*) source;
+	scan->start = scan->current;
 	scan->current_token = 0;
 	scan->line = 1;
-	scan->source_size = source_size;
+	memset((void*) scan->tokens, 0, sizeof(token) * MAX_TOKENS);
 
-	while(source[scan->current] != '\0' && scan->current_token < MAX_TOKENS) {
+	while(isAtEnd(scan) && scan->current_token < MAX_TOKENS) {
 		scan->start = scan->current;
 		scan_token(scan);
 	}
 
-	scan->tokens[scan->current_token] = new_token(TOKEN_TYPE_EOF, scan->line, 0, "\n");
+	scan->tokens[scan->current_token] = new_token(TOKEN_TYPE_EOF, scan->line, 0, NULL, 0);
 
 	return scan->tokens;
 }
@@ -36,7 +39,7 @@ void scan_token(scanner *scan){
 			break;
 		default:
 			if(isdigit(c)){
-				while((scan->current < scan->source_size) && isdigit(c)) {
+				while(isAtEnd(scan) && isdigit(c)) {
 					c = advance(scan);
 				}
 
@@ -47,10 +50,7 @@ void scan_token(scanner *scan){
 					tt = TOKEN_TYPE_REGISTER_PAIR;
 				}
 
-				char lexame[5];
-				get_lexame(lexame, scan);
-
-				scan->tokens[scan->current_token] = new_token(tt, scan->line, 0, lexame);
+				scan->tokens[scan->current_token] = new_token(tt, scan->line, 0, scan->start, scan->current - scan->start);
 				scan->current_token++;
 				if(c == '\n')
 					scan->line++;
@@ -60,19 +60,16 @@ void scan_token(scanner *scan){
 				if(c == 'R' || c == 'r')
 					maybeRegister = true;
 
-				while((scan->current < scan->source_size) && isalnum(c)) {
+				while(isAtEnd(scan) && isalnum(c)) {
 					c = advance(scan);
 				}
 
 				if((scan->current - scan->start < 2) && isdigit(c) && maybeRegister)
 					tt = TOKEN_TYPE_REGISTER;
 
-				char lexame[5];
-				get_lexame(lexame, scan);
-
 				if(c == ',')
 					tt = TOKEN_TYPE_LABEL;
-				scan->tokens[scan->current_token] = new_token(tt, scan->line, 0, lexame);
+				scan->tokens[scan->current_token] = new_token(tt, scan->line, 0, scan->start, scan->current - scan->start);
 				scan->current_token++;
 				if(c == '\n')
 					scan->line++;
@@ -82,23 +79,6 @@ void scan_token(scanner *scan){
 }
 
 char advance(scanner *scan) {
-	char c = scan->source[scan->current];
-	scan->current++;
-	return c;
+	return *scan->current++;
 }
 
-bool get_lexame(char *lexam, scanner *scan) {
-	assert(scan->current - scan->start);
-
-	uint32_t i = 0;
-	uint8_t j = 0;
-	for(i = scan->start; i < scan->current - 1; i++) {
-		if(j < 4) {
-			lexam[j] = scan->source[i];
-			j++;
-		}
-	}
-	lexam[j++] = '\0';
-
-	return true;
-}
