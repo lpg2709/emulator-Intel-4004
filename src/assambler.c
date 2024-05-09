@@ -1,10 +1,7 @@
 #include "./assambler.h"
 #include "./a_token.h"
 #include "./a_scanner.h"
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include "./files.h"
 
 void append_mnemonic(char m[3], char c) {
 	int i;
@@ -24,15 +21,15 @@ uint8_t opcode_to_hex(const char* opcode) {
 void parser(const char* source_path) {
 	long f_size;
 	const char* source = read_file(source_path, &f_size);
-	// token *tokens;
 	scanner s;
 
 	scan_tokens(&s, source, f_size);
 
 	int i = 0;
 	while (s.tokens[i].type != TOKEN_TYPE_EOF) {
-		print_token(s.tokens[i]);
-		i++;
+		print_token(&s.tokens[i++]);
+		// token_delete(&s.tokens[i]);
 	}
+	print_token(&s.tokens[i]);
 }
 
