@@ -25,11 +25,14 @@ void parser(const char* source_path) {
 
 	scan_tokens(&s, source, f_size);
 
+#ifndef DEBUG
 	int i = 0;
-	while (s.tokens[i].type != TOKEN_TYPE_EOF) {
+	printf("==================================== TOKENS ===================================\n");
+	do {
+		printf("[%05d] ", i);
 		print_token(&s.tokens[i++]);
-		// token_delete(&s.tokens[i]);
-	}
-	print_token(&s.tokens[i]);
+	} while (s.tokens[i].type != TOKEN_TYPE_EOF);
+	free(s.tokens);
+#endif
 }
 
