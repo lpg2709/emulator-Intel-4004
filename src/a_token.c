@@ -13,7 +13,7 @@ token token_new(enum token_type t, uint16_t l, uint8_t ib, char *lex, uint32_t l
 	return token;
 }
 
-#ifndef DEBUG
+#if DEBUG
 void print_token(token *t) {
 	printf("Type: ");
 #define P(s) printf("%-15s", s);

@@ -25,7 +25,7 @@ void parser(const char* source_path) {
 
 	scan_tokens(&s, source, f_size);
 
-#ifndef DEBUG
+#if DEBUG
 	int i = 0;
 	printf("==================================== TOKENS ===================================\n");
 	do {

@@ -30,7 +30,7 @@ struct sct_token {
 
 token token_new(enum token_type t, uint16_t l, uint8_t ib, char *lex, uint32_t lex_size);
 
-#ifndef DEBUG
+#if DEBUG
 void print_token(token *t);
 #endif
 
