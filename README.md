@@ -1,36 +1,42 @@
 # Intel 4004 emulator
 ```text
-                              I/O   I/O   I/O   I/O   Vdd    CM   TEST  RESET
-                               --    --    --    --    --    --    --    --
-                              |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-                           ---    --    --    --    --    --    --    --    ---
-                          |    16    15    14    13    12    11    10     9    |
-                          |                                                    |
-                          |           ##      ###         ###           ##     |
-                          |          ###    ##   ##     ##   ##        ###     |
-                           --       # ##   ##     ##   ##     ##      # ##     |
-                             |     #  ##   ##     ##   ##     ##     #  ##     |
-                             |    #   ##   ##     ##   ##     ##    #   ##     |
-                           --    #######   ##     ##   ##     ##   #######     |
-                          |           ##    ##   ##     ##   ##         ##     |
-                          |           ##      ###         ###           ##     |
-                          |                                                    |
-                          |     1     2     3     4     5     6     7     8    |
-                           ---    --    --    --    --    --    --    --    ---
-                              |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-                               --    --    --    --    --    --    --    --
-                               D0    D1    D2    D3    Vss   Ph1   Ph2  SYNC
+                            I/O   I/O   I/O   I/O   Vdd    CM   TEST  RESET
+                             --    --    --    --    --    --    --    --
+                            |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+                         ---    --    --    --    --    --    --    --    ---
+                        |    16    15    14    13    12    11    10     9    |
+                        |                                                    |
+                        |           ##      ###         ###           ##     |
+                        |          ###    ##   ##     ##   ##        ###     |
+                         --       # ##   ##     ##   ##     ##      # ##     |
+                           |     #  ##   ##     ##   ##     ##     #  ##     |
+                           |    #   ##   ##     ##   ##     ##    #   ##     |
+                         --    #######   ##     ##   ##     ##   #######     |
+                        |           ##    ##   ##     ##   ##         ##     |
+                        |           ##      ###         ###           ##     |
+                        |                                                    |
+                        |     1     2     3     4     5     6     7     8    |
+                         ---    --    --    --    --    --    --    --    ---
+                            |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+                             --    --    --    --    --    --    --    --
+                             D0    D1    D2    D3    Vss   Ph1   Ph2  SYNC
 ```
 
 > Development in progress
 
 Simple emulator of the Intel 4004 chip.
 
-The Intel 4004 was the first computer that I made an emulator, unfortunately I lost the code. Since then I have been studying and assembling small emulators and studying the architecture of computers and embedded devices. After a long time I am going back to the emulators, and the first one that I will focus on development is the Intel 4004, because it is a simple device with a few instructions (46 instructions).
+The Intel 4004 was the first computer that I made an emulator, unfortunately I
+lost the code. Since then I have been studying and assembling small emulators
+and studying the architecture of computers and embedded devices. After a long
+time I am going back to the emulators, and the first one that I will focus on
+development is the Intel 4004, because it is a simple device with a few
+instructions (46 instructions).
 
 ## Intel 4004
 
-Intel 4004 is a 4-bit CPU released by Intel in 1971, which was the first commercial programmable microprocessor.
+Intel 4004 is a 4-bit CPU released by Intel in 1971, which was the first
+commercial programmable microprocessor.
 
 ## Compile
 
