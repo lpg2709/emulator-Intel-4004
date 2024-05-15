@@ -244,6 +244,13 @@ void scan_token(scanner *scan){
 
 		if((scan->current - scan->start < 3) && isdigit(c) && maybeRegister)
 			tt = TOKEN_TYPE_REGISTER;
+		else if(peek(scan, 1) == ',') // MCS-4 Assembly Language Programming Manual describe label as:
+									  // "First character of the lavel must be a
+									  // latter of the alphabet. ...
+									  // The label field must end with a comma,
+									  // immediately following the laste
+									  // character of the label" - 3.1.3 LABEL FIELD
+			tt = TOKEN_TYPE_LABEL;
 		else
 			tt = identifierType(scan->start, scan->current - scan->start);
 
