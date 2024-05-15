@@ -47,21 +47,27 @@ void cli_d_print_all_ram(chip_4004 *c){
 
 void cli_screen_usage(){
 	printf(
-		"Usage: 4004-emulator [OPTIONS]\n"
+		"Usage: 4004-emulator [OPTIONS] File\n"
 		"Simple emulator of the Intel 4004 chip.\n"
 		"Intel 4004 is a 4-bit CPU released by Intel in 1971, which was the \n"
 		"  first commercial programmable microprocessor.\n"
 		"\n"
 		"Options:\n"
-		"-rf, --rom-file        Path to the ROM file.\n"
-		"-sf, --source-file     Path to the source file.\n"
-		"-of, --output-file     Path to the source file.\n"
+		"-e,  --emulator        Load a ROM/binary file and run. [Default]\n"
 		"-a,  --assembler       Use the assembler of 4004-emulator to generate\n"
 		"                         te binary file.\n"
 		"-d,  --disassembler    Use the disassembler of 4004-emulator to\n"
 		"                         generate the reverse opcodes of a binary file.\n"
+		"-o,  --output-file     Path to the output file. (Used by assembler and\n"
+        "                                                 disassembler)\n"
 		"     --help            Display this help and exit.\n"
 		"     --version         Output version information and exit\n"
+		"\n"
+		"File: \n"
+		" File path to ROM or source file, depending on the mode chosen.\n"
+		"  If in emulation mode or disassembler, the file need to be a \n"
+		"    ROM/binary file.\n"
+		"  If in assembler mode, the file need to be a source/text file.\n"
 	);
 }
 

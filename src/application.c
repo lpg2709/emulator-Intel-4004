@@ -29,13 +29,13 @@ void application_init(Options opt, chip_4004 *c){
 			break;
 
 		case EMULATOR:
-			if(strcmp(opt.rom_file_path, "") == 0){
-				fprintf(stderr, "Error: rom-file parameter is required for"
+			if(strcmp(opt.in_file_path, "") == 0){
+				fprintf(stderr, "Error: file path parameter is required for"
 								" emulation.\nFor help: 4004-emulator --help\n");
 				exit(2);
 			}
 			long size;
-			uint8_t *rom_source = (uint8_t*) b_read_file(opt.rom_file_path, &size);
+			uint8_t *rom_source = (uint8_t*) b_read_file(opt.in_file_path, &size);
 			int i;
 
 			for(i = 0; i < size; i++){
@@ -48,8 +48,8 @@ void application_init(Options opt, chip_4004 *c){
 			break;
 
 		case ASSEMBLER:
-			if(strcmp(opt.source_file_path, "") == 0){
-				fprintf(stderr, "Error: source-file parameter is required for"
+			if(strcmp(opt.in_file_path, "") == 0){
+				fprintf(stderr, "Error: file path parameter is required for"
 								" assembler.\nFor help: 4004-emulator --help\n");
 				exit(2);
 			}
@@ -60,7 +60,7 @@ void application_init(Options opt, chip_4004 *c){
 				exit(2);
 			}
 
-			parser(opt.source_file_path);
+			parser(opt.in_file_path);
 
 			exit(0);
 			break;
