@@ -8,7 +8,7 @@
 #include "./a_token.h"
 
 static bool isAtEnd(scanner *scan) {
-	return *scan->current == '\0';
+	return *scan->current == '\0' || scan->current_token > MAX_TOKENS;
 }
 
 static char advance(scanner *scan) {

@@ -1,5 +1,8 @@
 #include "./4004_chip.h"
 
+#include <stdio.h>
+#include <string.h>
+
 void init4004(chip_4004 *c){
 	chip_reset(c);
 }

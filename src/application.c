@@ -1,5 +1,7 @@
 #include "./application.h"
 
+#include "error.h"
+
 uint32_t cicles_limit;
 uint32_t cicle;
 uint8_t c_bank;
@@ -30,8 +32,8 @@ void application_init(Options opt, chip_4004 *c){
 
 		case EMULATOR:
 			if(strcmp(opt.in_file_path, "") == 0){
-				fprintf(stderr, "Error: file path parameter is required for"
-								" emulation.\nFor help: 4004-emulator --help\n");
+				LOG_ERROR("file path parameter is required for"
+						  " emulation.\nFor help: 4004-emulator --help\n");
 				exit(2);
 			}
 			long size;
@@ -49,14 +51,14 @@ void application_init(Options opt, chip_4004 *c){
 
 		case ASSEMBLER:
 			if(strcmp(opt.in_file_path, "") == 0){
-				fprintf(stderr, "Error: file path parameter is required for"
-								" assembler.\nFor help: 4004-emulator --help\n");
+				LOG_ERROR("file path parameter is required for"
+						  " assembler.\nFor help: 4004-emulator --help\n");
 				exit(2);
 			}
 
 			if(strcmp(opt.output_file_path, "") == 0){
-				fprintf(stderr, "Error: output-file parameter is required for"
-								" assembler.\nFor help: 4004-emulator --help\n");
+				LOG_ERROR("output-file parameter is required for"
+						  " assembler.\nFor help: 4004-emulator --help\n");
 				exit(2);
 			}
 
@@ -68,9 +70,11 @@ void application_init(Options opt, chip_4004 *c){
 		case DISASSEMBLER:
 			exit(0);
 			break;
+		case UNDEFINED:
+			LOG_ERROR("UNDEFINED mode, how it is possible! (°o°)\n");
+			exit(99);
+			break;
 	}
-
-
 }
 
 void application_main_loop(chip_4004 *c){

@@ -14,18 +14,17 @@ static Error setFilePath(char *dest, int *i, char **argv, bool consume_next) {
 	return ERROR_FILE_PATH_TO_LARGE;
 }
 
-bool options_parser(int argc, char **argv, Options *opt){
+Error options_parser(int argc, char **argv, Options *opt){
 	int i = 1; // First is the program name
-	opt->mode = EMULATOR;
+	opt->mode = UNDEFINED;
 	memset(opt->in_file_path, 0, MAX_PATH);
 
 	while(i < argc){
 		char *o = argv[i];
 		if(strcmp(o, "--emulator") == 0 || strcmp(o, "-e") == 0){
-			opt->mode = ASSEMBLER;
+			opt->mode = EMULATOR;
 			// TODO: Meke something with the error
-			setFilePath(opt->in_file_path, &i, argv, true);
-			return true;
+			return setFilePath(opt->in_file_path, &i, argv, true);
 		} else if(strcmp(o, "--assembler") == 0 || strcmp(o, "-a") == 0){
 			opt->mode = ASSEMBLER;
 		} else if(strcmp(o, "--disassembler") == 0 || strcmp(o, "-d") == 0){
@@ -35,10 +34,10 @@ bool options_parser(int argc, char **argv, Options *opt){
 			setFilePath(opt->output_file_path, &i, argv, true);
 		} else if(strcmp(o, "--help") == 0){
 			opt->mode = HELP;
-			return true;
+			goto end;
 		} else if(strcmp(o, "--version") == 0){
 			opt->mode = VERSION;
-			return true;
+			goto end;
 		} else {
 			// TODO: Meke something with the error
 			setFilePath(opt->in_file_path, &i, argv, false);
@@ -47,7 +46,11 @@ bool options_parser(int argc, char **argv, Options *opt){
 		i++;
 	}
 
-	return true;
+	if(opt->mode == UNDEFINED)
+		opt->mode = EMULATOR;
+
+end:
+	return ERROR_NOT;
 }
 
 #if DEBUG
@@ -68,6 +71,9 @@ void d_print_options(Options *opt){
 			break;
 		case VERSION:
 			strcpy(mode, "Version");
+			break;
+		case UNDEFINED:
+			strcpy(mode, "Undefined");
 			break;
 	}
 	printf("Options: \n"
