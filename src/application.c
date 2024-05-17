@@ -45,6 +45,7 @@ void application_init(Options opt, chip_4004 *c){
 			}
 
 			loadProgramROM(c, rom_source, size);
+			free(rom_source); // Data already copy to chip memory
 
 			cli_screen_startup();
 			break;
@@ -130,7 +131,6 @@ void application_main_loop(chip_4004 *c){
 
 		}
 	}
-
 }
 
 char application_input(){

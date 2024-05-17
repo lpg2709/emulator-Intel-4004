@@ -45,6 +45,7 @@ Error parser(const char* source_path) {
 
 	free(s.tokens);
 
+	free((void *)source);
 	return ERROR_NOT;
 }
 
