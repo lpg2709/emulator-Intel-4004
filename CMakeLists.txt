@@ -4,6 +4,7 @@ project(4004-emulator C)
 set (CMAKE_C_STANDARD 99)
 set(src_folder "src/")
 
+add_subdirectory(test)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
