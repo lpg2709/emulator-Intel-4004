@@ -56,11 +56,12 @@ If you don't know anything about intel 4004, your [wikipedia](https://en.wikiped
 
 Brief history of the Intel 4004. [Intel's First Microprocessor](https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html)
 
-[4004 Datasheet](https://datasheet4u.com/datasheet-pdf/Intel/4004/pdf.php?id=787753)*
-
-[MCS-4 Assembly Language Programming Manual - December 1973](https://archive.org/details/bitsavers_intelMCS4MProgrammingManualDec73_5215098)*
-
 Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.szyc.org/)
+
+[4004 Datasheet](./doc/4004\ Datasheet.pdf)*
+
+[MCS-4 Assembly Language Programming Manual - December 1973](./doc/MCS-4\ Assembly\ Language\ Programming\ Manual.pdf)*
+
 
 ## License
 
