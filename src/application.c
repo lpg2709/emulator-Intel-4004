@@ -63,7 +63,7 @@ void application_init(Options opt, chip_4004 *c){
 				exit(2);
 			}
 
-			parser(opt.in_file_path);
+			assembler(opt.in_file_path);
 
 			exit(0);
 			break;

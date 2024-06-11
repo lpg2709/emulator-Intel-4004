@@ -3,6 +3,6 @@
 
 #include "error.h"
 
-Error parser(const char* source_path);
+Error assembler(const char* source_path);
 
 #endif

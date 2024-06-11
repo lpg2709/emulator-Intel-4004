@@ -3,6 +3,7 @@
 #include "./a_scanner.h"
 #include "./files.h"
 #include "error.h"
+#include "4004_chip.h"
 
 #if DEBUG
 static void d_print_scanned_tokens(scanner *s) {
@@ -17,24 +18,23 @@ static void d_print_scanned_tokens(scanner *s) {
 }
 #endif
 
-void append_mnemonic(char m[3], char c) {
-	int i;
-	for(i = 0; i < 3; i++){
-		if(m[i] == 0){
-			m[i] = c;
-			return;
-		}
-	}
+static uint8_t nop() {
+	return NOP;
 }
 
-uint8_t opcode_to_hex(const char* opcode) {
-	// TODO: Compleat function
-	return opcode[0];
+void parse() {
+
 }
 
-Error parser(const char* source_path) {
+Error assembler(const char* source_path) {
 	long f_size;
 	const char* source = read_file(source_path, &f_size);
+	char *output = (char*) calloc(sizeof(char), ROM_MAX_SIZE);
+	size_t out_pos = 0;
+	if(output == NULL) {
+		fprintf(stderr, "Fail to alloc memory for assambler output\n");
+		return ERROR_ALLOC_MEMORY;
+	}
 	scanner s;
 
 	scan_tokens(&s, source, f_size);
@@ -42,6 +42,18 @@ Error parser(const char* source_path) {
 #if DEBUG
 	d_print_scanned_tokens(&s);
 #endif
+	token *t = &s.tokens[0];
+	while(t->type != TOKEN_TYPE_EOF) {
+		print_token(t);
+		t++;
+		switch(t->type) {
+			case TOKEN_TYPE_OP_NOP:
+				output[out_pos] = nop();
+				out_pos++;
+				break;
+
+		}
+	}
 
 	free(s.tokens);
 

@@ -31,7 +31,7 @@ void print_token(token *t) {
 		X_OPCODE
 		default: printf("%-15d", t->type); break;
 	}
-#undef CASE_TOKEN_OP
+#undef X
 #undef P
 	printf(" | Line: %-5" PRIu32 " | InByte: %-5" PRIu8 " | Lexame: %.*s\n",
 			t->line, t->in_bytes, t->lex_size, t->lex);

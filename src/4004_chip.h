@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #define ROM_PAGE_SIZE 256
+#define ROM_MAX_SIZE  32768
 #define WORD_I 8
 
 typedef struct sct_chip_4004 chip_4004;
