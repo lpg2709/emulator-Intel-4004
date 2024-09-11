@@ -1,5 +1,8 @@
 #include "files.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 const char* read_file(const char *path, long *f_size){
 	FILE *f = fopen(path, TEXT_READ_FILE);
 	long file_size = 0;

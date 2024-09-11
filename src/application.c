@@ -1,6 +1,14 @@
 #include "./application.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "error.h"
+#include "./assembler.h"
+#include "./gui_cli.h"
+#include "./files.h"
+#include "./version.h"
 
 uint32_t cicles_limit;
 uint32_t cicle;

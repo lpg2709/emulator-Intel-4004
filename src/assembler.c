@@ -1,4 +1,4 @@
-#include "./assambler.h"
+#include "./assembler.h"
 #include "./a_token.h"
 #include "./a_scanner.h"
 #include "./files.h"
@@ -51,7 +51,6 @@ Error assembler(const char* source_path) {
 				output[out_pos] = nop();
 				out_pos++;
 				break;
-
 		}
 	}
 

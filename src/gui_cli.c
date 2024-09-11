@@ -1,5 +1,9 @@
 #include "./gui_cli.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "./config.h"
+
 void cli_d_print_rom_memory(chip_4004 *c){
 	printf("------------------------------------------ ROM MEMORY -----------------------------------------\n");
 	int i;
