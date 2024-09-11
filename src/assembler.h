@@ -2,7 +2,8 @@
 #define ASSAMBLER_H
 
 #include "error.h"
+#include "options_parser.h"
 
-Error assembler(const char* source_path);
+Error assembler(Options *opt);
 
 #endif

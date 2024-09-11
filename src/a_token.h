@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "opcode.h"
 
-#define X(code, value, name, operands) TOKEN_TYPE_OP_##code,
+#define X(code, value, name, words) TOKEN_TYPE_OP_##code,
 enum token_type {
 	TOKEN_TYPE_UNKNOW,
 	TOKEN_TYPE_TEXT,  // Everythin, can change after scanner
@@ -23,12 +23,11 @@ typedef struct sct_token token;
 struct sct_token {
 	enum token_type type;
 	uint32_t line;
-	uint8_t in_bytes;
 	char *lex;
 	uint32_t lex_size;
 };
 
-token token_new(enum token_type t, uint16_t l, uint8_t ib, char *lex, uint32_t lex_size);
+token token_new(enum token_type t, uint16_t l, char *lex, uint32_t lex_size);
 
 #if DEBUG
 void print_token(token *t);

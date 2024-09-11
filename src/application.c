@@ -42,7 +42,7 @@ void application_init(Options opt, chip_4004 *c){
 			if(strcmp(opt.in_file_path, "") == 0){
 				LOG_ERROR("file path parameter is required for"
 						  " emulation.\nFor help: 4004-emulator --help\n");
-				exit(2);
+				exit(ERROR_PARAMETER_REQUIRED_NOT_INFORMED);
 			}
 			long size;
 			uint8_t *rom_source = (uint8_t*) b_read_file(opt.in_file_path, &size);
@@ -62,18 +62,18 @@ void application_init(Options opt, chip_4004 *c){
 			if(strcmp(opt.in_file_path, "") == 0){
 				LOG_ERROR("file path parameter is required for"
 						  " assembler.\nFor help: 4004-emulator --help\n");
-				exit(2);
+				exit(ERROR_PARAMETER_REQUIRED_NOT_INFORMED);
 			}
 
 			if(strcmp(opt.output_file_path, "") == 0){
 				LOG_ERROR("output-file parameter is required for"
 						  " assembler.\nFor help: 4004-emulator --help\n");
-				exit(2);
+				exit(ERROR_PARAMETER_REQUIRED_NOT_INFORMED);
 			}
 
-			assembler(opt.in_file_path);
+			Error error = assembler(&opt);
 
-			exit(0);
+			exit(error);
 			break;
 
 		case DISASSEMBLER:
@@ -81,7 +81,7 @@ void application_init(Options opt, chip_4004 *c){
 			break;
 		case UNDEFINED:
 			LOG_ERROR("UNDEFINED mode, how it is possible! (°o°)\n");
-			exit(99);
+			exit(ERROR_UNDEFINED_MODE);
 			break;
 	}
 }

@@ -205,7 +205,7 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 		scan_token(scan);
 	}
 
-	scan->tokens[scan->current_token] = token_new(TOKEN_TYPE_EOF, scan->line, 0, NULL, 0);
+	scan->tokens[scan->current_token] = token_new(TOKEN_TYPE_EOF, scan->line, NULL, 0);
 
 	return scan->tokens;
 }
@@ -213,6 +213,7 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 void scan_token(scanner *scan){
 	char c = advance(scan);
 	if(isdigit(c)){
+		char dig = c;
 		while(isdigit(c) && !isAtEnd(scan) && peek(scan, 1) != '\n' && peek(scan, 1) != ' ') {
 			c = advance(scan);
 		}
@@ -226,7 +227,7 @@ void scan_token(scanner *scan){
 				tt = TOKEN_TYPE_REGISTER_PAIR;
 		}
 
-		scan->tokens[scan->current_token++] = token_new(tt, scan->line, 0, scan->start, scan->current - scan->start);
+		scan->tokens[scan->current_token++] = token_new(tt, scan->line, scan->start, scan->current - scan->start);
 		if(c == '\n')
 			scan->line++;
 		return;
@@ -254,7 +255,7 @@ void scan_token(scanner *scan){
 		else
 			tt = identifierType(scan->start, scan->current - scan->start);
 
-		scan->tokens[scan->current_token++] = token_new(tt, scan->line, 0, scan->start, scan->current - scan->start);
+		scan->tokens[scan->current_token++] = token_new(tt, scan->line, scan->start, scan->current - scan->start);
 		if(c == '\n')
 			scan->line++;
 		return;

@@ -84,7 +84,7 @@ bool b_write_file(const char *path, const void *content, size_t size, size_t con
 		exit(1);
 	}
 
-	if( fwrite(content, size, content_size, f) != content_size){
+	if(fwrite(content, size, content_size, f) != content_size){
 		printf("Error: fail to write file: %s\n", path);
 		return false;
 	}
