@@ -114,12 +114,7 @@ uint16_t parse(char *output, scanner *s) {
 				output[out_pos++] = (uint8_t) NOP;
 				t++;
 				break;
-			case TOKEN_TYPE_OP_JCN:
-				printf("JCN NOT IMPLEMENTED\n");
-				output[out_pos++] = (uint8_t) JCN << 4;
-				output[out_pos++] = (uint8_t) 0;
-				t++;
-				break;
+			case TOKEN_TYPE_OP_JCN: GEN_INSTRUCTION_TWO_PARAM(JCN, TOKEN_TYPE_NUMBER, TOKEN_TYPE_NUMBER);
 			case TOKEN_TYPE_OP_FIM: GEN_INSTRUCTION_TWO_PARAM(FIM, TOKEN_TYPE_REGISTER_PAIR, TOKEN_TYPE_NUMBER);
 			case TOKEN_TYPE_OP_FIN: {
 					uint8_t instruction = (uint8_t) ((FIN) & 0xFF) << 4;
@@ -143,11 +138,10 @@ uint16_t parse(char *output, scanner *s) {
 					t += 2;
 					break;
 				}
-			case TOKEN_TYPE_OP_JUN:
-				{
+			case TOKEN_TYPE_OP_JUN: {
 					uint8_t instruction = (uint8_t) JUN << 4;
 					if(!tok_is(t[1], (TOKEN_TYPE_NUMBER))) {
-						fprintf(stderr, "Unexpected token on convertion of ("")\n");
+						fprintf(stderr, "Unexpected token on convertion of (JUN)\n");
 						break;
 					}
 					uint16_t addres = token_to_2byte(t[1]);
@@ -157,12 +151,19 @@ uint16_t parse(char *output, scanner *s) {
 					t += 2;
 					break;
 				}
-			case TOKEN_TYPE_OP_JMS:
-				printf("JMS NOT IMPLEMENTED\n");
-				output[out_pos++] = (uint8_t) JMS << 4;
-				output[out_pos++] = (uint8_t) 0;
-				t++;
-				break;
+			case TOKEN_TYPE_OP_JMS: {
+					uint8_t instruction = (uint8_t) JMS << 4;
+					if(!tok_is(t[1], (TOKEN_TYPE_NUMBER))) {
+						fprintf(stderr, "Unexpected token on convertion of (JMS)\n");
+						break;
+					}
+					uint16_t addres = token_to_2byte(t[1]);
+					instruction |= (addres & 0xF00);
+					output[out_pos++] = instruction;
+					output[out_pos++] = (addres & 0xFF);
+					t += 2;
+					break;
+				}
 			case TOKEN_TYPE_OP_INC: GEN_INSTRUCTION_ONE_PARAM(INC, TOKEN_TYPE_REGISTER);
 			case TOKEN_TYPE_OP_ISZ: GEN_INSTRUCTION_TWO_PARAM(ISZ, TOKEN_TYPE_REGISTER, TOKEN_TYPE_NUMBER);
 			case TOKEN_TYPE_OP_ADD: GEN_INSTRUCTION_ONE_PARAM(ADD, TOKEN_TYPE_REGISTER);

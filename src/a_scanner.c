@@ -98,7 +98,7 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 			switch(start[1]) {
 				CASE('C'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JCN); break;
 				CASE('I'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JIN); break;
-				CASE('M'): IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_JMS); break;
+				CASE('M'): IF_CHAR(start[2], 'S', TOKEN_TYPE_OP_JMS); break;
 				CASE('U'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JUN); break;
 				default: goto unknow;
 			}
@@ -220,6 +220,10 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 
 void scan_token(scanner *scan){
 	char c = advance(scan);
+	// TODO: Check if start with
+   	// $[0-F] .... hex
+  	// %[01]  .... binary
+  	// 0[0-7] .... octal
 	if(isdigit(c)){
 		while(isdigit(c) && !isAtEnd(scan) && peek(scan, 1) != '\n' && peek(scan, 1) != ' ') {
 			c = advance(scan);
