@@ -28,22 +28,22 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 #define DIST_A ('a' - 'A')
 #define CASE(x) case (x): \
     case ((x) + (DIST_A))
-#define IF_CHAR(s, c, tok) if( (s) == (c) || (s) == ((c) + (DIST_A)) ) { \
-	return (tok); } break;
+#define IF_CHAR(s, c, tok) do{ if( (s) == (c) || (s) == ((c) + (DIST_A)) ) { \
+	return (tok); } } while(0)
 
 	switch(*start) {
 		CASE('A'):
 			switch(start[1]) {
 				CASE('D'):
-					IF_CHAR(start[2], 'D', TOKEN_TYPE_OP_ADD)
-					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_ADM)
+					IF_CHAR(start[2], 'D', TOKEN_TYPE_OP_ADD);
+					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_ADM);
 					break;
 				default: goto unknow;
 			}
 			break;
 		CASE('B'):
 			switch(start[1]) {
-				CASE('B'): IF_CHAR(start[2], 'L', TOKEN_TYPE_OP_BBL)
+				CASE('B'): IF_CHAR(start[2], 'L', TOKEN_TYPE_OP_BBL); break;
 				default: goto unknow;
 			}
 			break;
@@ -71,39 +71,41 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 						CASE('C'): return TOKEN_TYPE_OP_DAC;
 						default: goto unknow;
 					}
-				CASE('C'): IF_CHAR(start[2], 'L', TOKEN_TYPE_OP_DCL)
+				CASE('C'): IF_CHAR(start[2], 'L', TOKEN_TYPE_OP_DCL); break;
 				default: goto unknow;
 			}
 			break;
 		CASE('F'):
 			switch(start[1]) {
-				CASE('I'):
-					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_FIM)
-					IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_FIN)
+				CASE('I'): {
+					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_FIM);
+					IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_FIN);
+					break;
+				}
 				default: goto unknow;
 			}
 			break;
 		CASE('I'):
 			switch(start[1]) {
-				CASE('A'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_IAC)
-				CASE('N'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_INC)
-				CASE('S'): IF_CHAR(start[2], 'Z', TOKEN_TYPE_OP_ISZ)
+				CASE('A'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_IAC); break;
+				CASE('N'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_INC); break;
+				CASE('S'): IF_CHAR(start[2], 'Z', TOKEN_TYPE_OP_ISZ); break;
 				default: goto unknow;
 			}
 			break;
 
 		CASE('J'):
 			switch(start[1]) {
-				CASE('C'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JCN)
-				CASE('I'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JIN)
-				CASE('M'): IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_JMS)
-				CASE('U'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JUN)
+				CASE('C'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JCN); break;
+				CASE('I'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JIN); break;
+				CASE('M'): IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_JMS); break;
+				CASE('U'): IF_CHAR(start[2], 'N', TOKEN_TYPE_OP_JUN); break;
 				default: goto unknow;
 			}
 			break;
 		CASE('K'):
 			switch(start[1]) {
-				CASE('B'): IF_CHAR(start[2], 'P', TOKEN_TYPE_OP_KBP)
+				CASE('B'): IF_CHAR(start[2], 'P', TOKEN_TYPE_OP_KBP); break;
 				default: goto unknow;
 			}
 			break;
@@ -111,52 +113,56 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 			switch(start[1]) {
 				CASE('D'):
 					if(offset == 2) return TOKEN_TYPE_OP_LD;
-					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_LDM)
+					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_LDM);
+					break;
 				default: goto unknow;
 			}
 			break;
 		CASE('N'):
 			switch(start[1]) {
-				CASE('O'): IF_CHAR(start[2], 'P', TOKEN_TYPE_OP_NOP)
+				CASE('O'): IF_CHAR(start[2], 'P', TOKEN_TYPE_OP_NOP); break;
 				default: goto unknow;
 			}
 			break;
 		CASE('R'):
 			switch(start[1]) {
 				CASE('A'):
-					IF_CHAR(start[2], 'L', TOKEN_TYPE_OP_RAL)
-					IF_CHAR(start[2], 'R', TOKEN_TYPE_OP_RAR)
+					IF_CHAR(start[2], 'L', TOKEN_TYPE_OP_RAL);
+					IF_CHAR(start[2], 'R', TOKEN_TYPE_OP_RAR);
+					 break;
 				CASE('D'):
 					if(start[2] == '0') return TOKEN_TYPE_OP_RD0;
 					if(start[2] == '1') return TOKEN_TYPE_OP_RD1;
 					if(start[2] == '2') return TOKEN_TYPE_OP_RD2;
 					if(start[2] == '3') return TOKEN_TYPE_OP_RD3;
-					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_RDM)
-					IF_CHAR(start[2], 'R', TOKEN_TYPE_OP_RDR)
+					IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_RDM);
+					IF_CHAR(start[2], 'R', TOKEN_TYPE_OP_RDR);
+					break;
 				default: goto unknow;
 			}
 			break;
 		CASE('S'):
 			switch(start[1]) {
-				CASE('M'): IF_CHAR(start[2], 'B', TOKEN_TYPE_OP_SMB)
-				CASE('R'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_SRC)
-				CASE('T'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_STC)
-				CASE('U'): IF_CHAR(start[2], 'B', TOKEN_TYPE_OP_SUB)
+				CASE('M'): IF_CHAR(start[2], 'B', TOKEN_TYPE_OP_SMB); break;
+				CASE('R'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_SRC); break;
+				CASE('T'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_STC); break;
+				CASE('U'): IF_CHAR(start[2], 'B', TOKEN_TYPE_OP_SUB); break;
 				default: goto unknow;
 			}
 			break;
 		CASE('T'):
 			switch(start[1]) {
 				CASE('C'):
-					IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_TCC)
-					IF_CHAR(start[2], 'S', TOKEN_TYPE_OP_TCS)
+					IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_TCC);
+					IF_CHAR(start[2], 'S', TOKEN_TYPE_OP_TCS);
+					break;
 				default: goto unknow;
 			}
 			break;
 		CASE('W'):
 			switch(start[1]) {
-				CASE('M'): IF_CHAR(start[2], 'P', TOKEN_TYPE_OP_WMP)
-				CASE('P'): IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_WPM)
+				CASE('M'): IF_CHAR(start[2], 'P', TOKEN_TYPE_OP_WMP); break;
+				CASE('P'): IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_WPM); break;
 				CASE('R'):
 					switch(start[2]) {
 						case '0': return TOKEN_TYPE_OP_WR0;
@@ -173,7 +179,9 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 			break;
 		CASE('X'):
 			switch(start[1]) {
-				CASE('C'): IF_CHAR(start[2], 'H', TOKEN_TYPE_OP_XCH)
+				CASE('C'):
+					IF_CHAR(start[2], 'H', TOKEN_TYPE_OP_XCH);
+					break;
 				default: goto unknow;
 			}
 			break;
@@ -213,7 +221,6 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 void scan_token(scanner *scan){
 	char c = advance(scan);
 	if(isdigit(c)){
-		char dig = c;
 		while(isdigit(c) && !isAtEnd(scan) && peek(scan, 1) != '\n' && peek(scan, 1) != ' ') {
 			c = advance(scan);
 		}

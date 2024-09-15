@@ -5,11 +5,11 @@
 #define X_OPCODE X(NOP, 0x00, "NOP", 1) \
 	X(JCN, 0x01, "JCN", 2) \
 	X(FIM, 0x02, "FIM", 2) \
-	X(FIN, 0x03, "JIN", 1) \
-	X(JIN, 0x03, "JUN", 1) \
-	X(JUN, 0x05, "JUN", 2) \
-	X(JMS, 0x06, "JMS", 2) \
-	X(INC, 0x05, "INC", 1) \
+	X(FIN, 0x03, "FIN", 1) \
+	X(JIN, 0x03, "JIN", 1) \
+	X(JUN, 0x04, "JUN", 2) \
+	X(JMS, 0x05, "JMS", 2) \
+	X(INC, 0x06, "INC", 1) \
 	X(ISZ, 0x07, "ISZ", 2) \
 	X(ADD, 0x08, "ADD", 1) \
 	X(SUB, 0x09, "SUB", 1) \

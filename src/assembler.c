@@ -30,7 +30,7 @@ static uint8_t token_to_byte(token t) {
 	switch(t.type) {
 		case TOKEN_TYPE_REGISTER_PAIR:  {
 			in_bytes = ((uint8_t) (t.lex[0] - '0')) * 2;
-			if(in_bytes > 8) // TODO: Invalid register pair
+			if(in_bytes > 16) // TODO: Invalid register pair
 				in_bytes = 0;
 			break;
 		}
@@ -40,6 +40,22 @@ static uint8_t token_to_byte(token t) {
 				in_bytes = 0;
 			break;
 		}
+		case TOKEN_TYPE_NUMBER:  {
+			char num[10] = { 0 };
+			sprintf(num, "%.*s", t.lex_size, t.lex);
+			in_bytes = (uint8_t) atoi(num);
+			break;
+		}
+		default: goto end;
+	}
+
+end:
+	return in_bytes;
+}
+
+static uint16_t token_to_2byte(token t) {
+	uint16_t in_bytes = 0;
+	switch(t.type) {
 		case TOKEN_TYPE_NUMBER:  {
 			char num[10] = { 0 };
 			sprintf(num, "%.*s", t.lex_size, t.lex);
@@ -72,8 +88,7 @@ end:
 	}
 
 #define GEN_INSTRUCTION_TWO_PARAM(opcode, param1_type, param2_type) { \
-		uint8_t instruction = 0; \
-		instruction = (uint8_t) ((opcode) & 0xFF) << 4; \
+		uint8_t instruction = (uint8_t) ((opcode) & 0xFF) << 4; \
 		if(!tok_is(t[1], (param1_type))) { \
 			fprintf(stderr, "Unexpected token on convertion of ("#opcode") param 1\n"); \
 			break; \
@@ -106,22 +121,42 @@ uint16_t parse(char *output, scanner *s) {
 				t++;
 				break;
 			case TOKEN_TYPE_OP_FIM: GEN_INSTRUCTION_TWO_PARAM(FIM, TOKEN_TYPE_REGISTER_PAIR, TOKEN_TYPE_NUMBER);
-			case TOKEN_TYPE_OP_FIN:
-				printf("FIN NOT IMPLEMENTED\n");
-				output[out_pos++] = (uint8_t) JCN << 4;
-				t++;
-				break;
-			case TOKEN_TYPE_OP_JIN:
-				printf("JIN NOT IMPLEMENTED\n");
-				output[out_pos++] = (uint8_t) JIN << 4;
-				t++;
-				break;
+			case TOKEN_TYPE_OP_FIN: {
+					uint8_t instruction = (uint8_t) ((FIN) & 0xFF) << 4;
+					if(!tok_is(t[1], (TOKEN_TYPE_REGISTER_PAIR))) {
+						fprintf(stderr, "Expected a register pair on FIN\n");
+						break;
+					}
+					instruction |= token_to_byte(t[1]);
+					output[out_pos++] = instruction;
+					t += 2;
+					break;
+				}
+			case TOKEN_TYPE_OP_JIN: {
+					uint8_t instruction = (uint8_t) ((JIN) & 0xFF) << 4;
+					if(!tok_is(t[1], (TOKEN_TYPE_REGISTER_PAIR))) {
+						fprintf(stderr, "Expected a register pair on JIN\n");
+						break;
+					}
+					instruction |= (token_to_byte(t[1]) | 0b01);
+					output[out_pos++] = instruction;
+					t += 2;
+					break;
+				}
 			case TOKEN_TYPE_OP_JUN:
-				printf("JUN NOT IMPLEMENTED\n");
-				output[out_pos++] = (uint8_t) JUN << 4;
-				output[out_pos++] = (uint8_t) 0;
-				t++;
-				break;
+				{
+					uint8_t instruction = (uint8_t) JUN << 4;
+					if(!tok_is(t[1], (TOKEN_TYPE_NUMBER))) {
+						fprintf(stderr, "Unexpected token on convertion of ("")\n");
+						break;
+					}
+					uint16_t addres = token_to_2byte(t[1]);
+					instruction |= (addres & 0xF00);
+					output[out_pos++] = instruction;
+					output[out_pos++] = (addres & 0xFF);
+					t += 2;
+					break;
+				}
 			case TOKEN_TYPE_OP_JMS:
 				printf("JMS NOT IMPLEMENTED\n");
 				output[out_pos++] = (uint8_t) JMS << 4;
