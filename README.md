@@ -33,12 +33,53 @@ time I am going back to the emulators, and the first one that I will focus on
 development is the Intel 4004, because it is a simple device with a few
 instructions (46 instructions).
 
+
+This program has an emulator, assembly and disassembler integrated for the
+Intel 4004. Its objective is to be faithful, as far as possible, to the original
+hardware, following the specifications of the documents of its time.
+
 ## Intel 4004
 
 Intel 4004 is a 4-bit CPU released by Intel in 1971, which was the first
 commercial programmable microprocessor.
 
+### References
+
+If you don't know anything about intel 4004, your [wikipedia](https://en.wikipedia.org/wiki/Intel_4004) page is a good place to start.
+
+Brief history of the Intel 4004. [Intel's First Microprocessor](https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html)
+
+Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.szyc.org/)
+
+[4004 Datasheet](./doc/4004\ Datasheet.pdf)*
+
+[MCS-4 Assembly Language Programming Manual - December 1973](./doc/MCS-4\ Assembly\ Language\ Programming\ Manual.pdf)*
+
+## Usage
+
+After download the executable for your system, open a terminal (or promt) and
+execute it. You have some modes:
+
+You can use `--help` to see the options in more detail.
+
+### Emulator -e (Default option)
+
+Execute a 4004 program instruction by instruction, view the registers and memory
+on a CLI ASCII view.
+
+### Assembler -a
+
+Compile a program to Intel 4004 bytes.
+
+### Disassembler -d
+
+Decompile a binary file to a text file with the assembley instruction.
+
 ## Compile
+
+You have to options to compile.
+
+## 1. Using CMake
 
 Inside the root dir of the project.
 
@@ -50,17 +91,18 @@ make
 
 That create the executable ```4004_emulator```.
 
-## References
+## 2. Using Zig
 
-If you don't know anything about intel 4004, your [wikipedia](https://en.wikipedia.org/wiki/Intel_4004) page is a good place to start.
+Inside the root dir of the project to compile for you machine.
 
-Brief history of the Intel 4004. [Intel's First Microprocessor](https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html)
+```sh
+zig build
+```
 
-Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.szyc.org/)
+> Need to be Zig 0.13.0
 
-[4004 Datasheet](./doc/4004\ Datasheet.pdf)*
-
-[MCS-4 Assembly Language Programming Manual - December 1973](./doc/MCS-4\ Assembly\ Language\ Programming\ Manual.pdf)*
+The zig build system and C compiler is used to gennerate the release
+executables.
 
 
 ## License
