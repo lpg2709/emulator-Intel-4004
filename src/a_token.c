@@ -20,11 +20,14 @@ void print_token(token *t) {
 	P((name)); break;
 	switch(t->type) {
 		case TOKEN_TYPE_UNKNOW: P("UNKNOW"); break;
-		case TOKEN_TYPE_TEXT: P("TEXT"); break;
 		case TOKEN_TYPE_LABEL: P("LABEL"); break;
+		case TOKEN_TYPE_LABEL_DECLARATION: P("LABEL_DECLARATION"); break;
 		case TOKEN_TYPE_NUMBER: P("NUMBER"); break;
 		case TOKEN_TYPE_REGISTER: P("REGISTER"); break;
 		case TOKEN_TYPE_REGISTER_PAIR: P("REGISTER_PAIR"); break;
+		case TOKEN_TYPE_PC_MOD: P("PC_MOD"); break;
+		case TOKEN_TYPE_ADD: P("ADD"); break;
+		case TOKEN_TYPE_SUB: P("SUB"); break;
 		case TOKEN_TYPE_EOF: P("EOF"); break;
 		case TOKEN_TYPE_LEN: P("LEN"); break;
 		X_OPCODE

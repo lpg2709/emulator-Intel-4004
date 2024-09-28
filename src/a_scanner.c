@@ -192,7 +192,7 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 #undef DIST_A
 
 unknow:
-	return TOKEN_TYPE_TEXT;
+	return TOKEN_TYPE_UNKNOW;
 }
 
 token* scan_tokens(scanner *scan, const char *source, long source_size){
@@ -220,10 +220,6 @@ token* scan_tokens(scanner *scan, const char *source, long source_size){
 
 void scan_token(scanner *scan){
 	char c = advance(scan);
-	// TODO: Check if start with
-   	// $[0-F] .... hex
-  	// %[01]  .... binary
-  	// 0[0-7] .... octal
 	if(isdigit(c)){
 		while(isdigit(c) && !isAtEnd(scan) && peek(scan, 1) != '\n' && peek(scan, 1) != ' ') {
 			c = advance(scan);
@@ -245,7 +241,7 @@ void scan_token(scanner *scan){
 	}
 
 	if(isalpha(c)) {
-		enum token_type tt = TOKEN_TYPE_TEXT;
+		enum token_type tt = TOKEN_TYPE_LABEL;
 		bool maybeRegister = false;
 		if(c == 'R' || c == 'r')
 			maybeRegister = true;
@@ -262,7 +258,7 @@ void scan_token(scanner *scan){
 									  // The label field must end with a comma,
 									  // immediately following the laste
 									  // character of the label" - 3.1.3 LABEL FIELD
-			tt = TOKEN_TYPE_LABEL;
+			tt = TOKEN_TYPE_LABEL_DECLARATION;
 		else
 			tt = identifierType(scan->start, scan->current - scan->start);
 
@@ -273,9 +269,18 @@ void scan_token(scanner *scan){
 	}
 
 	switch(c) {
-		case ';':
+		case '/': // 3.1.6 COMMENT FIELD
 			while(advance(scan) != '\n');
 			scan->line++;
+			break;
+		case '*':
+			scan->tokens[scan->current_token++] = token_new(TOKEN_TYPE_PC_MOD, scan->line, scan->start, scan->current - scan->start);
+			break;
+		case '+':
+			scan->tokens[scan->current_token++] = token_new(TOKEN_TYPE_ADD, scan->line, scan->start, scan->current - scan->start);
+			break;
+		case '-':
+			scan->tokens[scan->current_token++] = token_new(TOKEN_TYPE_SUB, scan->line, scan->start, scan->current - scan->start);
 			break;
 		case ' ':
 		case ',':
