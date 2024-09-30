@@ -1,14 +1,13 @@
 #include "../vendor/unity/unity.h"
 
-#include <stdlib.h>
 #include "../../src/a_token.h"
 #include "../../src/a_scanner.h"
 
 void test_only_comment() {
 	scanner s;
-	const char src[] = "; From: MCS-4 Assembly Language Programming Manual\n"
-		"; Write the value 2 into status character 1 of DATA RAM register 0  of chip 0\n"
-		";   of the currently selected DAT RAM bank;\n";
+	const char src[] = "/ From: MCS-4 Assembly Language Programming Manual\n"
+		"/ Write the value 2 into status character 1 of DATA RAM register 0  of chip 0\n"
+		"/   of the currently selected DAT RAM bank;\n";
 	scan_tokens(&s, src, sizeof(src));
 	TEST_ASSERT_EQUAL_INT(s.current_token, 0);
 }

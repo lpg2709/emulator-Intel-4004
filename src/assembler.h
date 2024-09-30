@@ -1,5 +1,5 @@
-#ifndef ASSAMBLER_H
-#define ASSAMBLER_H
+#ifndef ASSEMBLER_H
+#define ASSEMBLER_H
 
 #include "error.h"
 #include "options_parser.h"
