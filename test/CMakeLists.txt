@@ -1,10 +1,10 @@
 add_subdirectory(vendor/unity)
 
-add_executable(assembler ./assembler/test_runner.c ../src/a_scanner.c ../src/a_token.c)
-target_link_libraries(assembler unity)
-target_include_directories(assembler PRIVATE ../src)
+add_executable(a_scanner ./a_scanner/test_runner.c ../src/a_scanner.c ../src/a_token.c)
+target_link_libraries(a_scanner unity)
+target_include_directories(a_scanner PRIVATE ../src)
 
-add_test(NAME assembler_test COMMAND assembler)
+add_test(NAME a_scanner_test COMMAND a_scanner)
 
 add_executable(options_parser ./options_parser/test_runner.c ../src/options_parser.c)
 target_link_libraries(options_parser unity)

@@ -13,6 +13,7 @@ int main() {
 	// Set all only OPCODE teste
 	X_OPCODE
 	RUN_TEST(test_FIM);
+	RUN_TEST(test_label_declaration);
 	return UNITY_END();
 }
 #undef X

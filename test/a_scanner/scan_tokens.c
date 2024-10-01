@@ -37,3 +37,11 @@ static void test_FIM() {
 	free(s.tokens);
 }
 
+static void test_label_declaration() {
+	scanner s;
+	scan_tokens(&s, "label, NOP", 10);
+	TEST_ASSERT_EQUAL_INT(s.current_token, 2);
+	TEST_ASSERT_EQUAL_INT(s.tokens[0].type, TOKEN_TYPE_LABEL_DECLARATION);
+	TEST_ASSERT_EQUAL_INT(s.tokens[1].type, TOKEN_TYPE_OP_NOP);
+	free(s.tokens);
+}

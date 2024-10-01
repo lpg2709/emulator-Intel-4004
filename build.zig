@@ -84,12 +84,12 @@ pub const c_source_files = &[_][]const u8{
 
 pub const tests = [_]Test{
     Test{
-        .name = "assembler",
+        .name = "a_scanner",
         .files = &[_][]const u8{
             "src/a_scanner.c",
             "src/a_token.c",
-            "test/assembler/scan_tokens.c",
-            "test/assembler/test_runner.c",
+            "test/a_scanner/scan_tokens.c",
+            "test/a_scanner/test_runner.c",
         },
     },
     Test{
