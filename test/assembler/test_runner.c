@@ -5,12 +5,14 @@ void setUp() {}
 
 void tearDown() {}
 
+#define X(code, value, name, words) RUN_TEST(test_only_##code);
+
 int main() {
 	UNITY_BEGIN();
 	RUN_TEST(test_only_comment);
-	RUN_TEST(test_only_NOP);
-	RUN_TEST(test_only_FIM);
+	// Set all only OPCODE teste
+	X_OPCODE
 	RUN_TEST(test_FIM);
 	return UNITY_END();
 }
-
+#undef X

@@ -5,7 +5,7 @@
 #define EXECUTABLE_NAME "4004-emulator"
 #define T_ARGC (sizeof(argv) / sizeof(argv[0]))
 
-void test_help_mode() {
+static void test_help_mode() {
 	char *argv[] = { EXECUTABLE_NAME,  "--help" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -13,7 +13,7 @@ void test_help_mode() {
 	TEST_ASSERT_EQUAL_INT(options.mode, HELP);
 }
 
-void test_version_mode() {
+static void test_version_mode() {
 	char *argv[] = { EXECUTABLE_NAME, "--version" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -21,7 +21,7 @@ void test_version_mode() {
 	TEST_ASSERT_EQUAL_INT(options.mode, VERSION);
 }
 
-void test_emulator_default() {
+static void test_emulator_default() {
 	char *argv[] = { EXECUTABLE_NAME };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -29,7 +29,7 @@ void test_emulator_default() {
 	TEST_ASSERT_EQUAL_INT(options.mode, EMULATOR);
 }
 
-void test_assembler_mode_long() {
+static void test_assembler_mode_long() {
 	char *argv[] = { EXECUTABLE_NAME, "--assembler" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -37,7 +37,7 @@ void test_assembler_mode_long() {
 	TEST_ASSERT_EQUAL_INT(options.mode, ASSEMBLER);
 }
 
-void test_assembler_mode_short() {
+static void test_assembler_mode_short() {
 	char *argv[] = { EXECUTABLE_NAME, "-a" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -45,7 +45,7 @@ void test_assembler_mode_short() {
 	TEST_ASSERT_EQUAL_INT(options.mode, ASSEMBLER);
 }
 
-void test_disassembler_mode_long() {
+static void test_disassembler_mode_long() {
 	char *argv[] = { EXECUTABLE_NAME, "--disassembler" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -53,7 +53,7 @@ void test_disassembler_mode_long() {
 	TEST_ASSERT_EQUAL_INT(options.mode, DISASSEMBLER);
 }
 
-void test_disassembler_mode_short() {
+static void test_disassembler_mode_short() {
 	char *argv[] = { EXECUTABLE_NAME, "-d" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -61,7 +61,7 @@ void test_disassembler_mode_short() {
 	TEST_ASSERT_EQUAL_INT(options.mode, DISASSEMBLER);
 }
 
-void test_set_output_file_path() {
+static void test_set_output_file_path() {
 	char *argv[] = { EXECUTABLE_NAME, "-o", "test/foo" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
@@ -69,7 +69,7 @@ void test_set_output_file_path() {
 	TEST_ASSERT_EQUAL_STRING(options.output_file_path, argv[2]);
 }
 
-void test_set_input_file_path() {
+static void test_set_input_file_path() {
 	char *argv[] = { EXECUTABLE_NAME, "-e", "test/foo" };
 	Options options;
 	Error err_opt = options_parser(T_ARGC, argv, &options);
