@@ -1,9 +1,11 @@
 #include "../vendor/unity/unity.h"
+
 #include <stdlib.h>
 #include <string.h>
 
 #include "../../src/a_token.h"
 #include "../../src/a_scanner.h"
+#include "../../src/files.h"
 
 static void test_only_comment() {
 	scanner s;
@@ -45,3 +47,19 @@ static void test_label_declaration() {
 	TEST_ASSERT_EQUAL_INT(s.tokens[1].type, TOKEN_TYPE_OP_NOP);
 	free(s.tokens);
 }
+
+static void test_scan_RDn() {
+	long f_size;
+	const char* source = read_file("./roms/src/RDn.s", &f_size);
+	scanner s;
+	scan_tokens(&s, source, f_size);
+	TEST_ASSERT_EQUAL_INT(s.current_token, 6);
+	TEST_ASSERT_EQUAL_INT(s.tokens[0].type, TOKEN_TYPE_OP_FIM);
+	TEST_ASSERT_EQUAL_INT(s.tokens[1].type, TOKEN_TYPE_REGISTER_PAIR);
+	TEST_ASSERT_EQUAL_INT(s.tokens[2].type, TOKEN_TYPE_NUMBER);
+	TEST_ASSERT_EQUAL_INT(s.tokens[3].type, TOKEN_TYPE_OP_SRC);
+	TEST_ASSERT_EQUAL_INT(s.tokens[4].type, TOKEN_TYPE_REGISTER_PAIR);
+	TEST_ASSERT_EQUAL_INT(s.tokens[5].type, TOKEN_TYPE_OP_RD3);
+	free(s.tokens);
+}
+

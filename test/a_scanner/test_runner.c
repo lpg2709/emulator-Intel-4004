@@ -14,6 +14,7 @@ int main() {
 	X_OPCODE
 	RUN_TEST(test_FIM);
 	RUN_TEST(test_label_declaration);
+	RUN_TEST(test_scan_RDn);
 	return UNITY_END();
 }
 #undef X

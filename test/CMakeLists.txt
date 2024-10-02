@@ -1,6 +1,6 @@
 add_subdirectory(vendor/unity)
 
-add_executable(a_scanner ./a_scanner/test_runner.c ../src/a_scanner.c ../src/a_token.c)
+add_executable(a_scanner ./a_scanner/test_runner.c ../src/a_scanner.c ../src/a_token.c ../src/files.c)
 target_link_libraries(a_scanner unity)
 target_include_directories(a_scanner PRIVATE ../src)
 
@@ -11,3 +11,6 @@ target_link_libraries(options_parser unity)
 target_include_directories(options_parser PRIVATE ../src)
 
 add_test(NAME options_parser COMMAND options_parser)
+
+file(COPY ${CMAKE_SOURCE_DIR}/roms DESTINATION ${CMAKE_BINARY_DIR}/test)
+
