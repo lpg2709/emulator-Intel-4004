@@ -21,28 +21,33 @@ void cli_d_print_all_ram(chip_4004 *c){
 	printf("------------------------------------------ RAM MEMORY -----------------------------------------\n");
 	bank=chip=j=0;
 	for(i = 0; i < 2048; i++){
+		if((i%16 == 0 && i != 0)) {
+			printf("| ");
+			for(k = 0; k < 4; k++){
+				printf("%X ", c->RAM[k + (j*4)+((chip*15)+(bank*63))]);
+			}
+			printf("\ni: %d\n", i);
+			j++;
+			if(j > 3)
+				j = 0;
+		}
+
 		if(i == 0 || i%64 == 0){
 			printf("\n\n              BANK: %d CHIP: %d              \n", bank, chip);
-			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3");
+			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3\n");
 		}
-		if(i%64 == 0){
+		if(i%64 == 0 && i != 0){
 			chip++;
 			if(chip%4 == 0){
 				bank++;
 				chip = 0;
 			}
 		}
-		if(i%16 == 0){
-			printf(" | ");
-			for(k = 0; k < 4; k++){
-				printf("%X ", c->RAM[k + (j*4)+((chip*15)+(bank*63))]);
-			}
-			printf("\n");
-			if(j > 3)
-				j = 0;
+
+		if(i == 0 || i%16 == 0) {
 			printf("REGISTER %d: ", j);
-			j++;
 		}
+
 		printf("%X ", c->RAM[i]);
 	}
 	printf("\n-----------------------------------------------------------------------------------------------\n");
