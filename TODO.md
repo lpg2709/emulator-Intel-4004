@@ -40,3 +40,4 @@ Task for the project. (Moved from Clickup)
 - [04/11/2024] (Bug) Fix RAM printing
 - [01/10/2024] (Tests) Add uinit test for options_parser
 - [01/10/2024] (Tests) Add uinit test for token scanner
+- [13/11/2024] (Tests) Add uinit test for token structure
