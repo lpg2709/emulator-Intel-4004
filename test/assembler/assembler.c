@@ -8,42 +8,41 @@
 #include "../../src/error.h"
 #include "../../src/files.h"
 
-static void test_assembler_rom_FIN() {
-	Options opt = {
-		.mode = ASSEMBLER,
-		.output_file_path = "assembled_roms/FIN",
-		.in_file_path = "./roms/src/FIN.s"
-	};
+#define SF_ARRAY(...) { __VA_ARGS__ }
 
-	Error e = assembler(&opt);
+#define ASSEMBLER_TESTS  \
+	SF(FIN,             1, SF_ARRAY( 0x34 ) ) \
+	SF(JCN,             2, SF_ARRAY( 0x13, 0xF0 ) ) \
+	SF(JIN,             1, SF_ARRAY( 0x35 ) ) \
+	SF(JMS,             2, SF_ARRAY( 0x50, 0xF0 ) ) \
+	SF(JUN,             2, SF_ARRAY( 0x40, 0xF0 ) ) \
+	/* SF(Lables,          8, SF_ARRAY( 0x00, 0x40, 0x04, 0x00, 0xF2, 0x00, 0x40, 0x04 ))*/ \
+	SF(NOP,             1, SF_ARRAY( 0x00 ) )\
+	SF(RDn,             4, SF_ARRAY( 0x24, 0x05, 0x25, 0xEF ) )\
+	SF(WRM,             5, SF_ARRAY( 0x20, 0xB4, 0x21, 0xDF, 0xE0 ) )\
+	SF(WRR,             5, SF_ARRAY( 0x28, 0x40, 0x29, 0xDF, 0xE2 ) )\
+	SF(WRn,             5, SF_ARRAY( 0x20, 0x00, 0x21, 0xD2, 0xE5 ) )\
+	/* SF(ram_status_test, 1) */ \
+	/* SF(ram_test,        1) */
 
-	TEST_ASSERT_EQUAL_INT(ERROR_NOT, e);
-
-	long file_size = 0;
-	uint8_t *file_content = (uint8_t *) b_read_file(opt.output_file_path, &file_size);
-	TEST_ASSERT_EQUAL_INT(1, file_size);
-
-	TEST_ASSERT_EQUAL_INT(0x34, file_content[0]);
-	free(file_content);
+#define SF(src_name, byte_size, expected_binary) static void test_assembler_rom_##src_name () { \
+	Options opt = { \
+		.mode = ASSEMBLER, \
+		.output_file_path = "assembled_roms/" ""#src_name"", \
+		.in_file_path = "./roms/src/" ""#src_name"" ".s" \
+	}; \
+	Error e = assembler(&opt); \
+	TEST_ASSERT_EQUAL_INT_MESSAGE(ERROR_NOT, e, "Assembler return an error when compiling test '"""#src_name""".s' "); \
+	long file_size = 0; \
+	uint8_t expected_content[(byte_size)] = expected_binary; \
+	uint8_t *file_content = (uint8_t *) b_read_file(opt.output_file_path, &file_size); \
+	TEST_ASSERT_EQUAL_INT((byte_size), file_size); \
+	for(int i = 0; i < (byte_size); i++) { \
+		TEST_ASSERT_EQUAL_INT(expected_content[i], file_content[i]); \
+	} \
+	free(file_content); \
 }
 
-static void test_assembler_rom_JUN() {
-	Options opt = {
-		.mode = ASSEMBLER,
-		.output_file_path = "assembled_roms/JUN",
-		.in_file_path = "./roms/src/JUN.s"
-	};
-
-	Error e = assembler(&opt);
-
-	TEST_ASSERT_EQUAL_INT(ERROR_NOT, e);
-
-	long file_size = 0;
-	uint8_t *file_content = (uint8_t *) b_read_file(opt.output_file_path, &file_size);
-	TEST_ASSERT_EQUAL_INT(2, file_size);
-
-	TEST_ASSERT_EQUAL_INT(0x40, file_content[0]);
-	TEST_ASSERT_EQUAL_INT(0xF0, file_content[1]);
-	free(file_content);
-}
+ASSEMBLER_TESTS
+#undef SF
 

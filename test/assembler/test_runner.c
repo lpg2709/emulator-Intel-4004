@@ -5,9 +5,13 @@ void setUp() {}
 
 void tearDown() {}
 
+#define SF(src_name, byte_size, expected_binary) RUN_TEST(test_assembler_rom_##src_name);
+
 int main() {
 	UNITY_BEGIN();
-	RUN_TEST(test_assembler_rom_FIN);
-	RUN_TEST(test_assembler_rom_JUN);
+
+	ASSEMBLER_TESTS
+
 	return UNITY_END();
 }
+#undef SF

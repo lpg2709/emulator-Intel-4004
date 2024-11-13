@@ -19,6 +19,7 @@ Task for the project. (Moved from Clickup)
 - (Tests) Add test for compiling the programs inside roms/ folder
 - (Tests) Add test to run and check results of programs inside roms/ filder
 - (Release) Version 1.0.0; Only when assembler, disassembler and emulator is stable
+- Remove bin files, add new arg option to gennerate sample roms file
 
 ## Doing
 
