@@ -5,8 +5,6 @@ void setUp() {}
 
 void tearDown() {}
 
-#define X(code, value, name, words) RUN_TEST(test_only_##code);
-
 int main() {
 	UNITY_BEGIN();
 	RUN_TEST(test_empty_token);
@@ -14,4 +12,3 @@ int main() {
 	RUN_TEST(test_check_opcode_macro_gennerated);
 	return UNITY_END();
 }
-#undef X

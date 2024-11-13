@@ -18,5 +18,12 @@ target_include_directories(a_token PRIVATE ../src)
 
 add_test(NAME a_token COMMAND a_token)
 
+add_executable(assembler ./assembler/test_runner.c ../src/assembler.c ../src/options_parser.c ../src/a_scanner.c ../src/files.c ../src/a_token.c)
+target_link_libraries(assembler unity)
+target_include_directories(assembler PRIVATE ../src)
+
+add_test(NAME assembler COMMAND assembler)
+
 file(COPY ${CMAKE_SOURCE_DIR}/roms DESTINATION ${CMAKE_BINARY_DIR}/test)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test/assembled_roms)
 

@@ -16,7 +16,7 @@ const char* read_file(const char *path, long *f_size){
 	file_size = ftell(f);
 	fseek(f, 0L , SEEK_SET);
 
-	if(file_size == 1){
+	if(file_size == 0){
 		printf("Error: no content on file: %s\n", path);
 		exit(1);
 	}
@@ -52,7 +52,7 @@ const void *b_read_file(const char *path, long *bf_size){
 	file_size = ftell(f);
 	fseek(f, 0L , SEEK_SET);
 
-	if(file_size == 1){
+	if(file_size == 0){
 		printf("Error: no content on file: %s\n", path);
 		exit(1);
 	}

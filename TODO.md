@@ -13,7 +13,6 @@ Task for the project. (Moved from Clickup)
 - Improve error handling for assembler - Tokens gennerator
 - Improve error handling for assembler - Parser
 - (Tests) Add uinit test for token scanner using src files inside project
-- (Tests) Add uinit test for parser - assembler
 - (Tests) Add uinit test for 4004 structure and operations
 - (Tests) Add uinit test for 4004 emulator
 - (Tests) Add uinit test for Assembler gennerated final binnary
@@ -24,6 +23,7 @@ Task for the project. (Moved from Clickup)
 ## Doing
 
 - (Assembler) Parse lables; Declaration and reference
+- (Tests) Add uinit test for parser - assembler
 
 ## Blocked
 
