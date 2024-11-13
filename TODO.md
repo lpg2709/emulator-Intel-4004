@@ -12,12 +12,14 @@ Task for the project. (Moved from Clickup)
 - Improve error handling for emulator
 - Improve error handling for assembler - Tokens gennerator
 - Improve error handling for assembler - Parser
-- (Tests) Add uinit test for options_parser
-- (Tests) Add uinit test for token scanner
+- (Tests) Add uinit test for token scanner using src files inside project
 - (Tests) Add uinit test for parser - assembler
 - (Tests) Add uinit test for 4004 structure and operations
 - (Tests) Add uinit test for 4004 emulator
 - (Tests) Add uinit test for Assembler gennerated final binnary
+- (Tests) Add test for compiling the programs inside roms/ folder
+- (Tests) Add test to run and check results of programs inside roms/ filder
+- (Release) Version 1.0.0; Only when assembler, disassembler and emulator is stable
 
 ## Doing
 
@@ -36,4 +38,5 @@ Task for the project. (Moved from Clickup)
 - [15/05/2024] Better command line options standard
 - [04/06/2024] Add base setup for testings
 - [04/11/2024] (Bug) Fix RAM printing
-
+- [01/10/2024] (Tests) Add uinit test for options_parser
+- [01/10/2024] (Tests) Add uinit test for token scanner
