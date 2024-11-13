@@ -62,6 +62,7 @@ static uint16_t token_to_2byte(token t) {
 			in_bytes = (uint8_t) atoi(num);
 			break;
 		}
+		case TOKEN_TYPE_LABEL_DECLARATION: in_bytes = 0x0; break;
 		default: goto end;
 	}
 
@@ -140,8 +141,9 @@ uint16_t parse(char *output, scanner *s) {
 				}
 			case TOKEN_TYPE_OP_JUN: {
 					uint8_t instruction = (uint8_t) JUN << 4;
-					if(!tok_is(t[1], (TOKEN_TYPE_NUMBER))) {
+					if(!(tok_is(t[1], (TOKEN_TYPE_NUMBER)) || tok_is(t[1], (TOKEN_TYPE_LABEL_DECLARATION))))  {
 						fprintf(stderr, "Unexpected token on convertion of (JUN)\n");
+						t += 2;
 						break;
 					}
 					uint16_t addres = token_to_2byte(t[1]);
@@ -212,6 +214,7 @@ uint16_t parse(char *output, scanner *s) {
 			case TOKEN_TYPE_OP_RD1: GEN_INSTRUCTION_FIXED(RD1);
 			case TOKEN_TYPE_OP_RD2: GEN_INSTRUCTION_FIXED(RD2);
 			case TOKEN_TYPE_OP_RD3: GEN_INSTRUCTION_FIXED(RD3);
+			case TOKEN_TYPE_LABEL_DECLARATION: t++; break;
 			default:
 				fprintf(stderr, "Opcode (%.*s) invalid\n", t->lex_size, t->lex);
 				t++;
