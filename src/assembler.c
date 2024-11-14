@@ -7,6 +7,7 @@
 #include "files.h"
 #include "error.h"
 #include "4004_chip.h"
+#include "a_hash_table.h"
 
 #if DEBUG
 static void d_print_scanned_tokens(scanner *s) {
@@ -20,6 +21,78 @@ static void d_print_scanned_tokens(scanner *s) {
 		printf(">> MAX_TOKENS reached!\n");
 }
 #endif
+
+static void parse_label_declaration(scanner *s, HashTable *labels) {
+	uint16_t out_pos = 0;
+	token *t = &s->tokens[0];
+	while(t->type != TOKEN_TYPE_EOF) {
+		switch(t->type) {
+			case TOKEN_TYPE_OP_NOP:
+			case TOKEN_TYPE_OP_CLB:
+			case TOKEN_TYPE_OP_CLC:
+			case TOKEN_TYPE_OP_IAC:
+			case TOKEN_TYPE_OP_CMC:
+			case TOKEN_TYPE_OP_RAL:
+			case TOKEN_TYPE_OP_RAR:
+			case TOKEN_TYPE_OP_TCC:
+			case TOKEN_TYPE_OP_DAC:
+			case TOKEN_TYPE_OP_TCS:
+			case TOKEN_TYPE_OP_STC:
+			case TOKEN_TYPE_OP_DAA:
+			case TOKEN_TYPE_OP_KBP:
+			case TOKEN_TYPE_OP_DCL:
+			case TOKEN_TYPE_OP_WRM:
+			case TOKEN_TYPE_OP_WMP:
+			case TOKEN_TYPE_OP_WRR:
+			case TOKEN_TYPE_OP_WPM:
+			case TOKEN_TYPE_OP_WR0:
+			case TOKEN_TYPE_OP_WR1:
+			case TOKEN_TYPE_OP_WR2:
+			case TOKEN_TYPE_OP_WR3:
+			case TOKEN_TYPE_OP_SMB:
+			case TOKEN_TYPE_OP_RDM:
+			case TOKEN_TYPE_OP_RDR:
+			case TOKEN_TYPE_OP_ADM:
+			case TOKEN_TYPE_OP_RD0:
+			case TOKEN_TYPE_OP_RD1:
+			case TOKEN_TYPE_OP_RD2:
+			case TOKEN_TYPE_OP_RD3:
+				out_pos++;
+				t++;
+				break;
+			case TOKEN_TYPE_OP_JCN:
+			case TOKEN_TYPE_OP_FIM:
+			case TOKEN_TYPE_OP_FIN:
+			case TOKEN_TYPE_OP_JIN:
+			case TOKEN_TYPE_OP_INC:
+			case TOKEN_TYPE_OP_ADD:
+			case TOKEN_TYPE_OP_SUB:
+			case TOKEN_TYPE_OP_LD:
+			case TOKEN_TYPE_OP_XCH:
+			case TOKEN_TYPE_OP_BBL:
+			case TOKEN_TYPE_OP_LDM:
+			case TOKEN_TYPE_OP_SRC:
+				out_pos++;
+				t += 2;
+				break;
+			case TOKEN_TYPE_OP_JUN:
+			case TOKEN_TYPE_OP_JMS:
+			case TOKEN_TYPE_OP_ISZ:
+				out_pos += 2;
+				t += 2;
+				break;
+			case TOKEN_TYPE_LABEL_DECLARATION: {
+				hash_table_set(labels, t->lex,out_pos);
+				t++;
+				break;
+			}
+			default:
+				fprintf(stderr, "[Label Parser] Opcode (%.*s) invalid\n", t->lex_size, t->lex);
+				t++;
+				break;
+		}
+	}
+}
 
 static bool tok_is(token t, enum token_type ex) {
 	return t.type == ex;
@@ -53,7 +126,7 @@ end:
 	return in_bytes;
 }
 
-static uint16_t token_to_2byte(token t) {
+static uint16_t token_to_2byte(token t, HashTable *labels) {
 	uint16_t in_bytes = 0;
 	switch(t.type) {
 		case TOKEN_TYPE_NUMBER:  {
@@ -62,7 +135,10 @@ static uint16_t token_to_2byte(token t) {
 			in_bytes = (uint8_t) atoi(num);
 			break;
 		}
-		case TOKEN_TYPE_LABEL_DECLARATION: in_bytes = 0x0; break;
+		case TOKEN_TYPE_LABEL: {
+			hash_table_get(labels, t.lex, &in_bytes);
+			break;
+		}
 		default: goto end;
 	}
 
@@ -105,7 +181,7 @@ end:
 		break; \
 	}
 
-uint16_t parse(char *output, scanner *s) {
+uint16_t parse(char *output, scanner *s, HashTable *labels) {
 	uint16_t out_pos = 0;
 	token *t = &s->tokens[0];
 	while(t->type != TOKEN_TYPE_EOF) {
@@ -141,12 +217,12 @@ uint16_t parse(char *output, scanner *s) {
 				}
 			case TOKEN_TYPE_OP_JUN: {
 					uint8_t instruction = (uint8_t) JUN << 4;
-					if(!(tok_is(t[1], (TOKEN_TYPE_NUMBER)) || tok_is(t[1], (TOKEN_TYPE_LABEL_DECLARATION))))  {
+					if(!( tok_is(t[1], (TOKEN_TYPE_NUMBER)) || tok_is(t[1], (TOKEN_TYPE_LABEL)) ))  {
 						fprintf(stderr, "Unexpected token on convertion of (JUN)\n");
 						t += 2;
 						break;
 					}
-					uint16_t addres = token_to_2byte(t[1]);
+					uint16_t addres = token_to_2byte(t[1], labels);
 					instruction |= (addres & 0xF00);
 					output[out_pos++] = instruction;
 					output[out_pos++] = (addres & 0xFF);
@@ -159,7 +235,7 @@ uint16_t parse(char *output, scanner *s) {
 						fprintf(stderr, "Unexpected token on convertion of (JMS)\n");
 						break;
 					}
-					uint16_t addres = token_to_2byte(t[1]);
+					uint16_t addres = token_to_2byte(t[1], labels);
 					instruction |= (addres & 0xF00);
 					output[out_pos++] = instruction;
 					output[out_pos++] = (addres & 0xFF);
@@ -231,7 +307,10 @@ Error assembler(Options *opt) {
 	long f_size;
 	const char* source = read_file(opt->in_file_path, &f_size);
 	char output[ROM_MAX_SIZE] = { 0 };
+	HashTable labels = { 0 };
 	scanner s;
+
+	hash_table_init(&labels);
 
 	scan_tokens(&s, source, f_size);
 
@@ -239,8 +318,10 @@ Error assembler(Options *opt) {
 	d_print_scanned_tokens(&s);
 #endif
 
+	// First pass getting the lable address
+	parse_label_declaration(&s, &labels);
 	// Parse tokens to byte code
-	uint16_t output_size = parse(output, &s);
+	uint16_t output_size = parse(output, &s, &labels);
 
 #if DEBUG
 	printf("=============================== COMPILED OUTPUT ===============================\n");
@@ -254,6 +335,7 @@ Error assembler(Options *opt) {
 
 	free(s.tokens);
 	free((void *)source);
+	hash_table_deinit(&labels);
 
 	bool file_status = b_write_file(opt->output_file_path, output, sizeof(char), sizeof(char) * output_size);
 

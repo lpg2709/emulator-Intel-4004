@@ -15,7 +15,7 @@ token token_new(enum token_type t, uint16_t l, char *lex, uint32_t lex_size){
 #if DEBUG
 void print_token(token *t) {
 	printf("Type: ");
-#define P(s) printf("%-15s", s);
+#define P(s) printf("%-20s", s);
 #define X(code, value, name, words) case TOKEN_TYPE_OP_##code: \
 	P((name)); break;
 	switch(t->type) {

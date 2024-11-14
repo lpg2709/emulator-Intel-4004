@@ -192,7 +192,7 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 #undef DIST_A
 
 unknow:
-	return TOKEN_TYPE_UNKNOW;
+	return TOKEN_TYPE_LABEL;
 }
 
 token* scan_tokens(scanner *scan, const char *source, long source_size){
