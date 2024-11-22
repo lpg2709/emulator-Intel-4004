@@ -82,8 +82,15 @@ static void parse_label_declaration(scanner *s, HashTable *labels) {
 				t += 2;
 				break;
 			case TOKEN_TYPE_LABEL_DECLARATION: {
-				hash_table_set(labels, t->lex,out_pos);
-				t++;
+				if(t[1].type == TOKEN_TYPE_NUMBER) {
+					char num[10] = { 0 };
+					sprintf(num, "%.*s", t[1].lex_size, t[1].lex);
+					hash_table_set(labels, t->lex, (uint16_t) atoi(num));
+					t+=2;
+				} else {
+					hash_table_set(labels, t->lex, out_pos);
+					t++;
+				}
 				break;
 			}
 			default:
