@@ -9,6 +9,8 @@ Task for the project. (Moved from Clickup)
 - Improve run option on emulator, make possible to set the speed
 - Add originan clock speed on run
 - Add option to manipulate registers direct
+- Add scan and parse for '*' page 36, 3.1.5 topic (2)
+- Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
 - Improve error handling for emulator
 - Improve error handling for assembler - Tokens gennerator
 - Improve error handling for assembler - Parser

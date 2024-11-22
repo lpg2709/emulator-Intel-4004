@@ -22,7 +22,7 @@
 	SF(WRM,             5, SF_ARRAY( 0x20, 0xB4, 0x21, 0xDF, 0xE0 ) )\
 	SF(WRR,             5, SF_ARRAY( 0x28, 0x40, 0x29, 0xDF, 0xE2 ) )\
 	SF(WRn,             5, SF_ARRAY( 0x20, 0x00, 0x21, 0xD2, 0xE5 ) )\
-	/* SF(ram_status_test, 1) */ \
+	SF(ram_status_test, 1, SF_ARRAY( 0x20 )) \
 	/* SF(ram_test,        1) */
 
 #define SF(src_name, byte_size, expected_binary) static void test_assembler_rom_##src_name () { \

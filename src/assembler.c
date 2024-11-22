@@ -57,6 +57,8 @@ static void parse_label_declaration(scanner *s, HashTable *labels) {
 			case TOKEN_TYPE_OP_RD1:
 			case TOKEN_TYPE_OP_RD2:
 			case TOKEN_TYPE_OP_RD3:
+			case TOKEN_TYPE_NUMBER:
+			case TOKEN_TYPE_LABEL:
 				out_pos++;
 				t++;
 				break;
@@ -161,7 +163,7 @@ end:
 
 #define GEN_INSTRUCTION_ONE_PARAM(opcode, param_type) { \
 		uint8_t instruction = (uint8_t) ((opcode) & 0xFF) << 4; \
-		if(!tok_is(t[1], (param_type))) { \
+		if(! ( tok_is(t[1], (param_type)) || tok_is(t[1], TOKEN_TYPE_LABEL) )) { \
 			fprintf(stderr, "Unexpected token on convertion of ("#opcode")\n"); \
 			break; \
 		}\
@@ -173,11 +175,11 @@ end:
 
 #define GEN_INSTRUCTION_TWO_PARAM(opcode, param1_type, param2_type) { \
 		uint8_t instruction = (uint8_t) ((opcode) & 0xFF) << 4; \
-		if(!tok_is(t[1], (param1_type))) { \
-			fprintf(stderr, "Unexpected token on convertion of ("#opcode") param 1\n"); \
+		if(! ( tok_is(t[1], (param1_type)) || tok_is(t[1], TOKEN_TYPE_LABEL) )) { \
+			fprintf(stderr, "Unexpected token on convertion of ("#opcode") param 1. Token founded "#param1_type"\n"); \
 			break; \
 		} \
-		if(!tok_is(t[2], (param2_type))) { \
+		if(! ( tok_is(t[2], (param2_type)) || tok_is(t[2], TOKEN_TYPE_LABEL) )) { \
 			fprintf(stderr, "Unexpected token on convertion of ("#opcode") param 2\n"); \
 			break; \
 		} \
@@ -272,7 +274,7 @@ uint16_t parse(char *output, scanner *s, HashTable *labels) {
 			case TOKEN_TYPE_OP_DCL: GEN_INSTRUCTION_FIXED(DCL);
 			case TOKEN_TYPE_OP_SRC: {
 				uint8_t instruction = (uint8_t) SRC;
-				if(!tok_is(t[1], TOKEN_TYPE_REGISTER_PAIR) && !tok_is(t[1], TOKEN_TYPE_REGISTER) ) {
+				if(!tok_is(t[1], TOKEN_TYPE_REGISTER_PAIR) && !tok_is(t[1], TOKEN_TYPE_LABEL) ) {
 					fprintf(stderr, "Unexpected token\n");
 				}
 				instruction |= 0x1;
