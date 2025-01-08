@@ -1,6 +1,7 @@
 #include "./assembler.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "a_token.h"
 #include "a_scanner.h"
@@ -84,13 +85,15 @@ static void parse_label_declaration(scanner *s, HashTable *labels) {
 				t += 2;
 				break;
 			case TOKEN_TYPE_LABEL_DECLARATION: {
+				char label[4] = { 0 };
+				memcpy(label, t->lex, sizeof(char) * 3);
 				if(t[1].type == TOKEN_TYPE_NUMBER) {
 					char num[10] = { 0 };
 					sprintf(num, "%.*s", t[1].lex_size, t[1].lex);
-					hash_table_set(labels, t->lex, (uint16_t) atoi(num));
+					hash_table_set(labels, label, (uint16_t) atoi(num));
 					t+=2;
 				} else {
-					hash_table_set(labels, t->lex, out_pos);
+					hash_table_set(labels, label, out_pos);
 					t++;
 				}
 				break;
@@ -107,7 +110,7 @@ static bool tok_is(token t, enum token_type ex) {
 	return t.type == ex;
 }
 
-static uint8_t token_to_byte(token t) {
+static uint8_t token_to_byte(token t, HashTable *labels) {
 	uint8_t in_bytes = 0;
 	switch(t.type) {
 		case TOKEN_TYPE_REGISTER_PAIR:  {
@@ -126,6 +129,12 @@ static uint8_t token_to_byte(token t) {
 			char num[10] = { 0 };
 			sprintf(num, "%.*s", t.lex_size, t.lex);
 			in_bytes = (uint8_t) atoi(num);
+			break;
+		}
+		case TOKEN_TYPE_LABEL:  {
+			uint16_t in_b = 0;
+			hash_table_get(labels, t.lex, &in_b);
+			in_bytes = (uint8_t) in_b;
 			break;
 		}
 		default: goto end;
@@ -167,7 +176,7 @@ end:
 			fprintf(stderr, "Unexpected token on convertion of ("#opcode")\n"); \
 			break; \
 		}\
-		instruction |= token_to_byte(t[1]);\
+		instruction |= token_to_byte(t[1], labels);\
 		output[out_pos++] = instruction;\
 		t += 2;\
 		break;\
@@ -183,9 +192,9 @@ end:
 			fprintf(stderr, "Unexpected token on convertion of ("#opcode") param 2\n"); \
 			break; \
 		} \
-		instruction |= token_to_byte(t[1]); \
+		instruction |= token_to_byte(t[1], labels); \
 		output[out_pos++] = instruction; \
-		output[out_pos++] = token_to_byte(t[2]); \
+		output[out_pos++] = token_to_byte(t[2], labels); \
 		t += 3; \
 		break; \
 	}
@@ -208,7 +217,7 @@ uint16_t parse(char *output, scanner *s, HashTable *labels) {
 						fprintf(stderr, "Expected a register pair on FIN\n");
 						break;
 					}
-					instruction |= token_to_byte(t[1]);
+					instruction |= token_to_byte(t[1], labels);
 					output[out_pos++] = instruction;
 					t += 2;
 					break;
@@ -219,7 +228,7 @@ uint16_t parse(char *output, scanner *s, HashTable *labels) {
 						fprintf(stderr, "Expected a register pair on JIN\n");
 						break;
 					}
-					instruction |= (token_to_byte(t[1]) | 0b01);
+					instruction |= (token_to_byte(t[1], labels) | 0b01);
 					output[out_pos++] = instruction;
 					t += 2;
 					break;
@@ -278,7 +287,7 @@ uint16_t parse(char *output, scanner *s, HashTable *labels) {
 					fprintf(stderr, "Unexpected token\n");
 				}
 				instruction |= 0x1;
-				instruction |= token_to_byte(t[1]);
+				instruction |= token_to_byte(t[1], labels);
 				output[out_pos++] = instruction;
 				t += 2;
 				break;

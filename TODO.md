@@ -25,8 +25,8 @@ Task for the project. (Moved from Clickup)
 
 ## Doing
 
-- (Assembler) Parse lables; Declaration and reference
 - (Tests) Add uinit test for parser - assembler
+- FIX genneration for ram_test.s
 
 ## Blocked
 
@@ -44,3 +44,4 @@ Task for the project. (Moved from Clickup)
 - [01/10/2024] (Tests) Add uinit test for options_parser
 - [01/10/2024] (Tests) Add uinit test for token scanner
 - [13/11/2024] (Tests) Add uinit test for token structure
+- [08/01/2025] (Assembler) Parse lables; Declaration and reference

@@ -51,8 +51,7 @@ bool hash_table_set(HashTable *table, char *key, uint16_t address) {
 		return false;
 	}
 	uint32_t index = hash_string(key) % HASH_TABLE_MAX_ENTRIES;
-	Entry *entry = &table->entries[index];
-	if(!entry->declared) {
+	if(!table->entries[index].declared) {
 		table->entries[index].declared = true;
 		table->entries[index].address = address;
 		table->count++;
