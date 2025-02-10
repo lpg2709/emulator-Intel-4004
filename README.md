@@ -45,11 +45,16 @@ commercial programmable microprocessor.
 
 ### References
 
-If you don't know anything about intel 4004, your [wikipedia](https://en.wikipedia.org/wiki/Intel_4004) page is a good place to start.
+If you don't know anything about intel 4004, your
+[wikipedia](https://en.wikipedia.org/wiki/Intel_4004) page is a good place to
+start.
 
 Brief history of the Intel 4004. [Intel's First Microprocessor](https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html)
 
 Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.szyc.org/)
+
+> This emulator does not strictly follow the specifications of the original
+4004, having some facilities and conveniences not present in the documentation.
 
 [4004 Datasheet](./doc/4004\ Datasheet.pdf)*
 
