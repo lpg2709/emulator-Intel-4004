@@ -22,7 +22,7 @@
                              D0    D1    D2    D3    Vss   Ph1   Ph2  SYNC
 ```
 
-> Development in progress
+> Development in progress. (Check dev branch)
 
 Simple emulator of the Intel 4004 chip.
 
