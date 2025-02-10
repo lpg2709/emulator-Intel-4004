@@ -4,7 +4,6 @@ Task for the project. (Moved from Clickup)
 
 ## Backlog
 
-- (Assembler) Gennerate the final binary
 - (Disassembler) Develop the disassembler module
 - Improve run option on emulator, make possible to set the speed
 - Add originan clock speed on run
@@ -25,8 +24,7 @@ Task for the project. (Moved from Clickup)
 
 ## Doing
 
-- (Tests) Add uinit test for parser - assembler
-- FIX genneration for ram_test.s
+- (Assembler) Gennerate the final binary
 
 ## Blocked
 
@@ -45,3 +43,5 @@ Task for the project. (Moved from Clickup)
 - [01/10/2024] (Tests) Add uinit test for token scanner
 - [13/11/2024] (Tests) Add uinit test for token structure
 - [08/01/2025] (Assembler) Parse lables; Declaration and reference
+- [10/02/2025] (Tests) Add uinit test for parser - assembler
+- [10/02/2025] FIX genneration for ram_test.s
