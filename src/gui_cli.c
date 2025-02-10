@@ -26,7 +26,7 @@ void cli_d_print_all_ram(chip_4004 *c){
 			for(k = 0; k < 4; k++){
 				printf("%X ", c->RAM[k + (j*4)+((chip*15)+(bank*63))]);
 			}
-			printf("\ni: %d\n", i);
+			printf("\n");
 			j++;
 			if(j > 3)
 				j = 0;
