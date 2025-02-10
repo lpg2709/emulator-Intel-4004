@@ -342,11 +342,11 @@ Error assembler(Options *opt) {
 	uint16_t output_size = parse(output, &s, &labels);
 
 #if DEBUG
-	printf("=============================== COMPILED OUTPUT ===============================\n");
+	printf("=============================== COMPILED OUTPUT ===============================");
 	for(int i = 0; i < (int) output_size; i++) {
+		if(i % 8 == 0)
+			printf("\n[%.5X] ", i);
 		printf("%.2X ", output[i] & 0xFF);
-		if(i % 8 == 0 && i != 0)
-			printf("\n");
 	}
 	printf("\n");
 #endif
