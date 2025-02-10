@@ -56,9 +56,9 @@ Recommended online emulator: [Emulator - Assembler - Disassembler](http://e4004.
 > This emulator does not strictly follow the specifications of the original
 4004, having some facilities and conveniences not present in the documentation.
 
-[4004 Datasheet](./doc/4004\ Datasheet.pdf)*
+[4004 Datasheet](./doc/4004%20Datasheet.pdf) *
 
-[MCS-4 Assembly Language Programming Manual - December 1973](./doc/MCS-4\ Assembly\ Language\ Programming\ Manual.pdf)*
+[MCS-4 Assembly Language Programming Manual - December 1973](./doc/MCS-4%20Assembly%20Language%20Programming%20Manual.pdf)*
 
 ## Usage
 
@@ -80,6 +80,8 @@ Compile a program to Intel 4004 bytes.
 
 Decompile a binary file to a text file with the assembley instruction.
 
+> Not implemented
+
 ## Compile
 
 You have to options to compile.
@@ -97,6 +99,8 @@ make
 That create the executable ```4004_emulator```.
 
 ## 2. Using Zig
+
+> Not fully suported by now
 
 Inside the root dir of the project to compile for you machine.
 
