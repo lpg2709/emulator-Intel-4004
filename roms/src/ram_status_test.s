@@ -3,7 +3,7 @@
 
 init,
 	FIM 0P, 0    / initialize R0=R1=0
-	FIM 2P, 0    / initialize R2=R3=0
+	FIM 1P, 0    / initialize R2=R3=0
 	LDM 12         / load 12 to accumulator
 	XCH R2         / initialize R2=12
 loop,
