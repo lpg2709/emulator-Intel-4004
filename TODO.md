@@ -5,8 +5,6 @@ Task for the project. (Moved from Clickup)
 ## Backlog
 
 - (Disassembler) Develop the disassembler module
-- Improve run option on emulator, make possible to set the speed
-- Add originan clock speed on run
 - Add option to manipulate registers direct
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
 - Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
@@ -45,3 +43,4 @@ Task for the project. (Moved from Clickup)
 - [08/01/2025] (Assembler) Parse lables; Declaration and reference
 - [10/02/2025] (Tests) Add uinit test for parser - assembler
 - [10/02/2025] FIX genneration for ram_test.s
+- [11/02/2025] Improve run option on emulator

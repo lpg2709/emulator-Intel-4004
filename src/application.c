@@ -9,6 +9,8 @@
 #include "./gui_cli.h"
 #include "./files.h"
 #include "./version.h"
+#include "sleep.h"
+#include "term_io.h"
 
 uint32_t cicles_limit;
 uint32_t cicle;
@@ -94,11 +96,25 @@ void application_main_loop(chip_4004 *c){
 			opt = application_input();
 
 		if(run){
-			cicle += chip_cycle(c, 99999999);
+			if(tio_kbhit()) {
+				opt = 0;
+				getchar(); // Discart char
+			}
+			cicle += chip_cycle(c, 1);
 		}
 		switch(opt){
+			case 0:
+				tio_deinit();
+				run = false;
+				break;
 			case 'r':
+				tio_init();
 				run = true;
+				break;
+			case 'a':
+				tio_init();
+				run = true;
+				sleep_ms(100);
 				break;
 			case 'n':
 				cicles_limit = 1;
