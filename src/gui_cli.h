@@ -13,4 +13,6 @@ void cli_screen_startup();
 
 void cli_main_view(chip_4004 *c,int bank, int chip, uint64_t cycle);
 
+void cli_clear_screen();
+
 #endif

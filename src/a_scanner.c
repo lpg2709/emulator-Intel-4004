@@ -1,6 +1,5 @@
 #include "./a_scanner.h"
 
-#include <bits/stdint-uintn.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

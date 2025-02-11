@@ -1,8 +1,11 @@
-#include "./gui_cli.h"
+#include "gui_cli.h"
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 #include <stdio.h>
-#include <stdlib.h>
-#include "./config.h"
+#include "config.h"
 
 void cli_d_print_rom_memory(chip_4004 *c){
 	printf("------------------------------------------ ROM MEMORY -----------------------------------------\n");
@@ -81,6 +84,7 @@ void cli_screen_usage(){
 }
 
 void cli_screen_startup(){
+	cli_clear_screen();
 	printf(
 		"\n"
 		"           WELCOME TO\n"
@@ -106,7 +110,7 @@ void cli_screen_startup(){
 }
 
 void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
-	system("clear");
+	cli_clear_screen();
 #define RAM(index) c->RAM[index+(chip*64)+(bank*256)]
 #define RAM_STATUS(index) c->RAM_status[index+(chip*16)+(bank*64)]
 
@@ -168,3 +172,41 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 #undef RAM_STATUS
 }
 
+#ifdef WIN32
+static void _windows_cls() {
+	HANDLE hStdOut;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD count;
+	DWORD cellCount;
+	COORD homeCoords = { 0, 0 };
+
+	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hStdOut == INVALID_HANDLE_VALUE)
+		return;
+
+	/* Get the number of cells in the current buffer */
+	if (!GetConsoleScreenBufferInfo( hStdOut, &csbi ))
+		return;
+
+	cellCount = csbi.dwSize.X * csbi.dwSize.Y;
+
+	/* Fill the entire buffer with spaces */
+	if (!FillConsoleOutputCharacter(hStdOut, (TCHAR) ' ', cellCount, homeCoords, &count))
+		return;
+
+	/* Fill the entire buffer with the current colors and attributes */
+	if (!FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, homeCoords, &count))
+		return;
+
+	/* Move the cursor home */
+	SetConsoleCursorPosition( hStdOut, homeCoords );
+}
+#endif
+
+void cli_clear_screen() {
+#ifdef WIN32
+	_windows_cls();
+#else
+	printf("\e[1;1H\e[2J");
+#endif
+}
