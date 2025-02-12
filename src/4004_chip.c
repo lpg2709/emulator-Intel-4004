@@ -41,7 +41,7 @@ uint32_t chip_cycle(chip_4004 *c, uint32_t cycles_limit){
 				}
 				break;
 			case 0x30:
-				switch(mOpcode & 0x0F){
+				switch(mOpcode & 0x01){
 					case 0x00:
 						opcode_fin(c, mOpcode & 0x0F);
 						break;
