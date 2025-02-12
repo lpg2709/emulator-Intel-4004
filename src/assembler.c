@@ -51,7 +51,7 @@ static void parse_label_declaration(scanner *s, HashTable *labels) {
 			case TOKEN_TYPE_OP_WR1:
 			case TOKEN_TYPE_OP_WR2:
 			case TOKEN_TYPE_OP_WR3:
-			case TOKEN_TYPE_OP_SMB:
+			case TOKEN_TYPE_OP_SBM:
 			case TOKEN_TYPE_OP_RDM:
 			case TOKEN_TYPE_OP_RDR:
 			case TOKEN_TYPE_OP_ADM:
@@ -301,7 +301,7 @@ uint16_t parse(char *output, scanner *s, HashTable *labels) {
 			case TOKEN_TYPE_OP_WR1: GEN_INSTRUCTION_FIXED(WR1);
 			case TOKEN_TYPE_OP_WR2: GEN_INSTRUCTION_FIXED(WR2);
 			case TOKEN_TYPE_OP_WR3: GEN_INSTRUCTION_FIXED(WR3);
-			case TOKEN_TYPE_OP_SMB: GEN_INSTRUCTION_FIXED(SMB);
+			case TOKEN_TYPE_OP_SBM: GEN_INSTRUCTION_FIXED(SBM);
 			case TOKEN_TYPE_OP_RDM: GEN_INSTRUCTION_FIXED(RDM);
 			case TOKEN_TYPE_OP_RDR: GEN_INSTRUCTION_FIXED(RDR);
 			case TOKEN_TYPE_OP_ADM: GEN_INSTRUCTION_FIXED(ADM);

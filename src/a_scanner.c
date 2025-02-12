@@ -56,6 +56,7 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 					}
 				CASE('M'):
 					switch(start[2]) {
+						CASE('A'): return TOKEN_TYPE_OP_CMA;
 						CASE('C'): return TOKEN_TYPE_OP_CMC;
 						default: goto unknow;
 					}
@@ -142,7 +143,7 @@ static enum token_type identifierType(char *start, uint32_t offset) {
 			break;
 		CASE('S'):
 			switch(start[1]) {
-				CASE('M'): IF_CHAR(start[2], 'B', TOKEN_TYPE_OP_SMB); break;
+				CASE('B'): IF_CHAR(start[2], 'M', TOKEN_TYPE_OP_SBM); break;
 				CASE('R'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_SRC); break;
 				CASE('T'): IF_CHAR(start[2], 'C', TOKEN_TYPE_OP_STC); break;
 				CASE('U'): IF_CHAR(start[2], 'B', TOKEN_TYPE_OP_SUB); break;

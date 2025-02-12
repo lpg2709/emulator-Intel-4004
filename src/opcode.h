@@ -40,7 +40,7 @@
 	X(WR1, 0xE5, "WR1", 1) \
 	X(WR2, 0xE6, "WR2", 1) \
 	X(WR3, 0xE7, "WR3", 1) \
-	X(SMB, 0xE8, "SMB", 1) \
+	X(SBM, 0xE8, "SBM", 1) \
 	X(RDM, 0xE9, "RDM", 1) \
 	X(RDR, 0xEA, "RDR", 1) \
 	X(ADM, 0xEB, "ADM", 1) \
