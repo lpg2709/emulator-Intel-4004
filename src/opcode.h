@@ -21,6 +21,7 @@
 	X(CLC, 0xF1, "CLC", 1) \
 	X(IAC, 0xF2, "IAC", 1) \
 	X(CMC, 0xF3, "CMC", 1) \
+	X(CMA, 0xF4, "CMA", 1) \
 	X(RAL, 0xF5, "RAL", 1) \
 	X(RAR, 0xF6, "RAR", 1) \
 	X(TCC, 0xF7, "TCC", 1) \
