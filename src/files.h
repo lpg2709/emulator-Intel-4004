@@ -20,8 +20,8 @@
 #define BINARY_APPEND_CREATE_FILE "ab+"
 
 
-const char* read_file(const char *path, long *f_size);
-const void* b_read_file(const char *path, long *bf_size);
+const char* read_file(const char *path, uint32_t *f_size);
+const void* b_read_file(const char *path, uint32_t *bf_size);
 bool b_write_file(const char *path, const void *content, size_t size, size_t content_size);
 
 #endif

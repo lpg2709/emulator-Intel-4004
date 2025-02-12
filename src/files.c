@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char* read_file(const char *path, long *f_size){
+const char* read_file(const char *path, uint32_t *f_size){
 	FILE *f = fopen(path, TEXT_READ_FILE);
 	long file_size = 0;
 	char *file_content;
@@ -39,7 +39,7 @@ const char* read_file(const char *path, long *f_size){
 	return file_content;
 }
 
-const void *b_read_file(const char *path, long *bf_size){
+const void *b_read_file(const char *path, uint32_t *bf_size){
 	FILE *f = fopen(path, "rb");
 	long file_size = 0;
 	const void *file_content;

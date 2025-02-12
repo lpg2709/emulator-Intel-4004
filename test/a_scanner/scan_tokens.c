@@ -49,7 +49,7 @@ static void test_label_declaration() {
 }
 
 static void test_scan_RDn() {
-	long f_size;
+	uint32_t f_size;
 	const char* source = read_file("./roms/src/RDn.s", &f_size);
 	scanner s;
 	scan_tokens(&s, source, f_size);

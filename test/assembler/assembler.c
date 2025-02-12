@@ -33,7 +33,7 @@
 	}; \
 	Error e = assembler(&opt); \
 	TEST_ASSERT_EQUAL_INT_MESSAGE(ERROR_NOT, e, "Assembler return an error when compiling test '"""#src_name""".s' "); \
-	long file_size = 0; \
+	uint32_t file_size = 0; \
 	uint8_t expected_content[(byte_size)] = expected_binary; \
 	uint8_t *file_content = (uint8_t *) b_read_file(opt.output_file_path, &file_size); \
 	TEST_ASSERT_EQUAL_INT_MESSAGE(file_size, (byte_size), "Binary size!"); \

@@ -1,5 +1,6 @@
 #include "./assembler.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -322,7 +323,7 @@ uint16_t parse(char *output, scanner *s, HashTable *labels) {
 #undef GEN_INSTRUCTION_FIXED
 
 Error assembler(Options *opt) {
-	long f_size;
+	uint32_t f_size;
 	const char* source = read_file(opt->in_file_path, &f_size);
 	char output[ROM_MAX_SIZE] = { 0 };
 	HashTable labels = { 0 };
