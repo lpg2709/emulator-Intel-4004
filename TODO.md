@@ -4,7 +4,6 @@ Task for the project. (Moved from Clickup)
 
 ## Backlog
 
-- (Disassembler) Develop the disassembler module
 - Add option to manipulate registers direct
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
 - Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
@@ -23,6 +22,7 @@ Task for the project. (Moved from Clickup)
 ## Doing
 
 - (Assembler) Gennerate the final binary
+- (Disassembler) Develop the disassembler module
 
 ## Blocked
 

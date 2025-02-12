@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "disassembler.h"
 #include "error.h"
 #include "./assembler.h"
 #include "./gui_cli.h"
@@ -40,27 +41,27 @@ void application_init(Options opt, chip_4004 *c){
 			exit(0);
 			break;
 
-		case EMULATOR:
+		case EMULATOR: {
 			if(strcmp(opt.in_file_path, "") == 0){
 				LOG_ERROR("file path parameter is required for"
 						  " emulation.\nFor help: 4004-emulator --help\n");
 				exit(ERROR_PARAMETER_REQUIRED_NOT_INFORMED);
 			}
-			long size;
+			uint32_t size;
 			uint8_t *rom_source = (uint8_t*) b_read_file(opt.in_file_path, &size);
-			int i;
 
-			for(i = 0; i < size; i++){
+#if DEBUG
+			for(uint32_t i = 0; i < size; i++){
 				printf("%.2X ", rom_source[i]);
 			}
-
-			loadProgramROM(c, rom_source, size);
+#endif
+			chip_load_rom(c, rom_source, size);
 			free(rom_source); // Data already copy to chip memory
 
 			cli_screen_startup();
 			break;
-
-		case ASSEMBLER:
+		}
+		case ASSEMBLER: {
 			if(strcmp(opt.in_file_path, "") == 0){
 				LOG_ERROR("file path parameter is required for"
 						  " assembler.\nFor help: 4004-emulator --help\n");
@@ -77,10 +78,19 @@ void application_init(Options opt, chip_4004 *c){
 
 			exit(error);
 			break;
+		}
+		case DISASSEMBLER: {
+			if(strcmp(opt.in_file_path, "") == 0){
+				LOG_ERROR("file path parameter is required for"
+						  " disassembler.\nFor help: 4004-emulator --help\n");
+				exit(ERROR_PARAMETER_REQUIRED_NOT_INFORMED);
+			}
 
-		case DISASSEMBLER:
-			exit(0);
+			Error error = disassembler(&opt);
+
+			exit(error);
 			break;
+		}
 		case UNDEFINED:
 			LOG_ERROR("UNDEFINED mode, how it is possible! (°o°)\n");
 			exit(ERROR_UNDEFINED_MODE);

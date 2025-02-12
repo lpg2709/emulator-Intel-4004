@@ -7,9 +7,9 @@ void init4004(chip_4004 *c){
 	chip_reset(c);
 }
 
-bool loadProgramROM(chip_4004 *c, uint8_t *program, long program_size){
+bool chip_load_rom(chip_4004 *c, uint8_t *program, uint32_t program_size){
 	if(program_size >= 4096){
-		printf("Load program to ROM error: the maximum size is 4096 bits, your code have %ld bit(s).\n", program_size);
+		printf("Load program to ROM error: the maximum size is 4096 bits, your code have %d bit(s).\n", program_size);
 		return false;
 	}
 	memcpy(c->ROM, program, program_size);
