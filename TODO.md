@@ -22,8 +22,6 @@ Task for the project. (Moved from Clickup)
 
 ## Doing
 
-- (Emulator) ADD opcode (disassembled) view on emulation
-
 ## Blocked
 
 ## Compleated
@@ -46,4 +44,5 @@ Task for the project. (Moved from Clickup)
 - [11/02/2025] Improve run option on emulator
 - [12/02/2025] (Assembler) Gennerate the final binary
 - [12/02/2025] (Disassembler) Develop the disassembler module
-- Add doc for development
+- [13/02/2025] Add doc for development
+- [13/02/2025] (Emulator) ADD opcode (disassembled) view on emulation

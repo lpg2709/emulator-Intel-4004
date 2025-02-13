@@ -1,11 +1,14 @@
 #include "gui_cli.h"
+#include <stdint.h>
 
 #ifdef WIN32
 #include <windows.h>
 #endif
 
+#include <string.h>
 #include <stdio.h>
 #include "config.h"
+#include "disassembler.h"
 
 void cli_d_print_rom_memory(chip_4004 *c){
 	printf("------------------------------------------ ROM MEMORY -----------------------------------------\n");
@@ -111,6 +114,12 @@ void cli_screen_startup(){
 
 void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 	cli_clear_screen();
+
+    char decoded_instruction[20] = { 0 };
+    uint8_t ws = 0;
+    disassembler_get_opcode(&c->ROM[c->PC], decoded_instruction, &ws);
+    strtok(decoded_instruction, "\n");
+
 #define RAM(index) c->RAM[index+(chip*64)+(bank*256)]
 #define RAM_STATUS(index) c->RAM_status[index+(chip*16)+(bank*64)]
 
@@ -125,7 +134,7 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 			"                                          REGISTER 2: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
 			"ACCUMULATOR: %X     CARRY: %X  TEST: %X      REGISTER 3: %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X %X | %X %X %X %X\n"
 			"PC: %03X            CYCLES: %ld\n"
-			"->: %.2X %.2X\n"
+			"-> [ 0x%.2X 0x%.2X ] %s\n"
 		 	,
 			  bank, chip,
 			  c->STACK.addrs[0], c->IR[0x0], c->IR[0x1], c->IR[0x8], c->IR[0x9],
@@ -134,7 +143,7 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 			                     c->IR[0x6], c->IR[0x7], c->IR[0xE], c->IR[0xF], RAM(16), RAM(17), RAM(18), RAM(19), RAM(20), RAM(21), RAM(22), RAM(23), RAM(24), RAM(25), RAM(26), RAM(27), RAM(28), RAM(29), RAM(30), RAM(31), RAM_STATUS(4), RAM_STATUS(5), RAM_STATUS(6), RAM_STATUS(7),
 			                                                                     RAM(32), RAM(33), RAM(34), RAM(35), RAM(36), RAM(37), RAM(38), RAM(39), RAM(40), RAM(41), RAM(42), RAM(43), RAM(44), RAM(45), RAM(46), RAM(47), RAM_STATUS(8), RAM_STATUS(9), RAM_STATUS(10), RAM_STATUS(11),
 			  c->ACC, c->carry, c->test,                                         RAM(48), RAM(49), RAM(50), RAM(51), RAM(52), RAM(53), RAM(54), RAM(55), RAM(56), RAM(57), RAM(58), RAM(59), RAM(60), RAM(61), RAM(62), RAM(63), RAM_STATUS(12), RAM_STATUS(13), RAM_STATUS(14), RAM_STATUS(15),
-			  c->PC, cycle, c->ROM[c->PC], c->ROM[c->PC + 1]);
+			  c->PC, cycle, c->ROM[c->PC], c->ROM[c->PC + 1], decoded_instruction);
 #else
 	printf(
 			"\n"
@@ -153,7 +162,7 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 			"\n"
 			"ACCUMULATOR: %X     CARRY: %X  TEST: %X\n"
 			"PC: %03X            CYCLES: %ld\n"
-			"->: %.2X %.2X\n"
+			"-> [ 0x%.2X 0x%.2X ] %s\n"
 		 	,
 			  c->STACK.addrs[0], c->IR[0x0], c->IR[0x1], c->IR[0x8], c->IR[0x9],
 			  c->STACK.addrs[1], c->IR[0x2], c->IR[0x3], c->IR[0xA], c->IR[0xB],
@@ -165,7 +174,7 @@ void cli_main_view(chip_4004 *c, int bank, int chip, uint64_t cycle){
 			  RAM(32), RAM(33), RAM(34), RAM(35), RAM(36), RAM(37), RAM(38), RAM(39), RAM(40), RAM(41), RAM(42), RAM(43), RAM(44), RAM(45), RAM(46), RAM(47), RAM_STATUS(8), RAM_STATUS(9), RAM_STATUS(10), RAM_STATUS(11),
 			  RAM(48), RAM(49), RAM(50), RAM(51), RAM(52), RAM(53), RAM(54), RAM(55), RAM(56), RAM(57), RAM(58), RAM(59), RAM(60), RAM(61), RAM(62), RAM(63), RAM_STATUS(12), RAM_STATUS(13), RAM_STATUS(14), RAM_STATUS(15),
 			  c->ACC, c->carry, c->test,
-			  c->PC, cycle, c->ROM[c->PC], c->ROM[c->PC + 1]);
+			  c->PC, cycle, c->ROM[c->PC], c->ROM[c->PC + 1], decoded_instruction);
 #endif
 
 #undef RAM
