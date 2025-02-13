@@ -368,15 +368,14 @@ void opcode_tcc(chip_4004 *c){
 }
 
 void opcode_dac(chip_4004 *c){
-	c->ACC-=1;
-	// TODO: FIX - Can't be less then 0
-	if(c->ACC < 0){
+	if(c->ACC == 0){
 		c->ACC = 0xF;
 		c->carry = false;
-	}
-	if(c->ACC > 15){
-		c->ACC = 0;
-		c->carry = true;
+	} else {
+		c->ACC-=1;
+		if(c->ACC > 15){
+			c->carry = true;
+		}
 	}
 	c->PC++;
 }

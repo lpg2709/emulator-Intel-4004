@@ -99,7 +99,7 @@ void application_init(Options opt, chip_4004 *c){
 }
 
 void application_main_loop(chip_4004 *c){
-	char opt;
+	char opt = 0;
 	while(shound_run){
 		cli_main_view(c, c_bank, c_chip, cicle);
 		if(!run)
