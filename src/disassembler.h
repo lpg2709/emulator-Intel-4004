@@ -7,7 +7,7 @@
 #include "error.h"
 #include "options_parser.h"
 
-bool dis_byte_to_op(uint16_t byte, char op[4], uint8_t *word_size);
+bool disassembler_get_opcode(uint8_t *bytes, char op[20], uint8_t *word_size);
 Error disassembler(Options *opt);
 
 #endif // !DISASSEMBLER_H

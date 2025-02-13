@@ -15,14 +15,13 @@ Task for the project. (Moved from Clickup)
 - (Tests) Add uinit test for 4004 emulator
 - (Tests) Add uinit test for Assembler gennerated final binnary
 - (Tests) Add test for compiling the programs inside roms/ folder
-- (Tests) Add test to run and check results of programs inside roms/ filder
+- (Tests) Add test to run and check results of programs inside roms/ folder
 - (Release) Version 1.0.0; Only when assembler, disassembler and emulator is stable
-- Remove bin files, add new arg option to gennerate sample roms file
+- (v1.0.1) Remove bin files, add new arg option to gennerate sample roms file
 
 ## Doing
 
-- (Assembler) Gennerate the final binary
-- (Disassembler) Develop the disassembler module
+- (Emulator) ADD opcode (disassembled) view on emulation
 
 ## Blocked
 
@@ -44,3 +43,6 @@ Task for the project. (Moved from Clickup)
 - [10/02/2025] (Tests) Add uinit test for parser - assembler
 - [10/02/2025] FIX genneration for ram_test.s
 - [11/02/2025] Improve run option on emulator
+- [12/02/2025] (Assembler) Gennerate the final binary
+- [12/02/2025] (Disassembler) Develop the disassembler module
+
