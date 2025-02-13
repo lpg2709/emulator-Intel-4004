@@ -4,18 +4,19 @@ Task for the project. (Moved from Clickup)
 
 ## Backlog
 
+- Update zig build with tests
 - Add option to manipulate registers direct
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
 - Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
-- Improve error handling for emulator
-- Improve error handling for assembler - Tokens gennerator
-- Improve error handling for assembler - Parser
 - (Tests) Add uinit test for token scanner using src files inside project
 - (Tests) Add uinit test for 4004 structure and operations
 - (Tests) Add uinit test for 4004 emulator
 - (Tests) Add uinit test for Assembler gennerated final binnary
 - (Tests) Add test for compiling the programs inside roms/ folder
 - (Tests) Add test to run and check results of programs inside roms/ folder
+- Improve error handling for emulator
+- Improve error handling for assembler - Tokens gennerator
+- Improve error handling for assembler - Parser
 - (Release) Version 1.0.0; Only when assembler, disassembler and emulator is stable
 - (v1.0.1) Remove bin files, add new arg option to gennerate sample roms file
 
@@ -45,4 +46,4 @@ Task for the project. (Moved from Clickup)
 - [11/02/2025] Improve run option on emulator
 - [12/02/2025] (Assembler) Gennerate the final binary
 - [12/02/2025] (Disassembler) Develop the disassembler module
-
+- Add doc for development

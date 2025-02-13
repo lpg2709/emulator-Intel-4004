@@ -74,17 +74,15 @@ on a CLI ASCII view.
 
 ### Assembler -a
 
-Compile a program to Intel 4004 bytes.
+Compile a program to Intel 4004 binary.
 
 ### Disassembler -d
 
 Decompile a binary file to a text file with the assembley instruction.
 
-> Not implemented
-
 ## Compile
 
-You have to options to compile.
+You have two options to compile.
 
 ## 1. Using CMake
 
