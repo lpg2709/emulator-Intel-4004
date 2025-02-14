@@ -4,8 +4,9 @@ Task for the project. (Moved from Clickup)
 
 ## Backlog
 
-- Update zig build with tests
-- Add option to manipulate registers direct
+- (Emulator) Fix instruction WRn, not executing correct
+- Create a program to write on every ram, chip and banks
+- Update zig build
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
 - Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
 - (Tests) Add uinit test for token scanner using src files inside project
@@ -14,6 +15,8 @@ Task for the project. (Moved from Clickup)
 - (Tests) Add uinit test for Assembler gennerated final binnary
 - (Tests) Add test for compiling the programs inside roms/ folder
 - (Tests) Add test to run and check results of programs inside roms/ folder
+- (Emulator) Add option to manipulate registers direct
+- Add tests on zig build
 - Improve error handling for emulator
 - Improve error handling for assembler - Tokens gennerator
 - Improve error handling for assembler - Parser
