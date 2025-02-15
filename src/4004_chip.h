@@ -14,7 +14,7 @@ struct sct_chip_4004{
 	uint8_t IR[16];               // On 4004 the index registers are 4 bits not 8
 	uint8_t ROM[4096];
 	uint8_t RAM[2048];            // 8 banks, one bank have 4 chips, one chip have 64 characters of 4bits
-	uint8_t RAM_status[128];      // 8 banks, one bank have 4 chips, one chip have 16 status charactes
+	uint8_t RAM_status[512];      // 8 banks, one bank have 4 chips, one chip have 16 status charactes
 	uint8_t RAM_bank;
 	uint8_t RAM_addrs;
 	uint8_t RAM_output[4*8];      // on 4004 are 4 bits not 8, all RAM banks have 1 output port

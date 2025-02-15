@@ -30,7 +30,7 @@ void cli_d_print_all_ram(chip_4004 *c){
 		if((i%16 == 0 && i != 0)) {
 			printf("| ");
 			for(k = 0; k < 4; k++){
-				printf("%X ", c->RAM[k + (j*4)+((chip*15)+(bank*63))]);
+				printf("%X ", c->RAM_status[((4 * j) + (16 * chip) + (64 * bank)) + k]);
 			}
 			printf("\n");
 			j++;
@@ -38,10 +38,6 @@ void cli_d_print_all_ram(chip_4004 *c){
 				j = 0;
 		}
 
-		if(i == 0 || i%64 == 0){
-			printf("\n\n              BANK: %d CHIP: %d              \n", bank, chip);
-			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3\n");
-		}
 		if(i%64 == 0 && i != 0){
 			chip++;
 			if(chip%4 == 0){
@@ -50,12 +46,21 @@ void cli_d_print_all_ram(chip_4004 *c){
 			}
 		}
 
+		if(i == 0 || i%64 == 0){
+			printf("\n\n              BANK: %d CHIP: %d              \n", bank, chip);
+			printf("            0 1 2 3 4 5 6 7 8 9 A B C D E F | 0 1 2 3\n");
+		}
+
 		if(i == 0 || i%16 == 0) {
 			printf("REGISTER %d: ", j);
 		}
 
 		printf("%X ", c->RAM[i]);
 	}
+    printf("| ");
+    for(k = 0; k < 4; k++){
+        printf("%X ", c->RAM_status[((4 * j) + (16 * chip) + (64 * bank)) + k]);
+    }
 	printf("\n-----------------------------------------------------------------------------------------------\n");
 
 }

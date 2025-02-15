@@ -24,8 +24,6 @@ Task for the project. (Moved from Clickup)
 
 ## Doing
 
-- (Emulator) Fix RAM MEMORY print, is not printing RAM_status
-
 ## Blocked
 
 ## Compleated
@@ -51,3 +49,5 @@ Task for the project. (Moved from Clickup)
 - [13/02/2025] Add doc for development
 - [13/02/2025] (Emulator) ADD opcode (disassembled) view on emulation
 - [15/02/2025] (Emulator) Fix instruction WRn, not executing correct
+- [15/02/2025] (Emulator) Fix RAM MEMORY print, is not printing RAM_status
+

@@ -189,7 +189,7 @@ void chip_reset(chip_4004 *c){
 	memset((void*) c->IR, 0, sizeof(uint8_t)*16);
 	memset((void*) c->ROM, 0, sizeof(uint8_t)*4096);
 	memset((void*) c->RAM, 0, sizeof(uint8_t)*2048);
-	memset((void*) c->RAM_status, 0, sizeof(uint8_t)*128);
+	memset((void*) c->RAM_status, 0, sizeof(uint8_t)*512);
 	memset((void*) c->STACK.addrs, 0, sizeof(uint16_t)*3);
 	memset((void*) c->RAM_output, 0, sizeof(uint8_t)*4*8);
 	c->STACK.SP = 0;
