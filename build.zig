@@ -69,17 +69,21 @@ pub fn build(b: *std.Build) void {
 }
 
 pub const c_source_files = &[_][]const u8{
-    "src/main.c",
-    "src/4004_chip.c",
-    "src/a_scanner.c",
-    "src/a_token.c",
     "src/application.c",
+    "src/disassembler.c",
+    "src/main.c",
     "src/assembler.c",
-    "src/config.c",
-    "src/files.c",
     "src/gui_cli.c",
+    "src/term_io.c",
+    "src/files.c",
+    "src/a_scanner.c",
     "src/options_parser.c",
     "src/sleep.c",
+    "src/opcode.c",
+    "src/4004_chip.c",
+    "src/a_hash_table.c",
+    "src/config.c",
+    "src/a_token.c",
 };
 
 pub const tests = [_]Test{

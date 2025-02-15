@@ -5,7 +5,6 @@ Task for the project. (Moved from Clickup)
 ## Backlog
 
 - Create a program to write on every ram, chip and banks
-- Update zig build
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
 - Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
 - (Tests) Add uinit test for token scanner using src files inside project
@@ -50,4 +49,4 @@ Task for the project. (Moved from Clickup)
 - [13/02/2025] (Emulator) ADD opcode (disassembled) view on emulation
 - [15/02/2025] (Emulator) Fix instruction WRn, not executing correct
 - [15/02/2025] (Emulator) Fix RAM MEMORY print, is not printing RAM_status
-
+- [15/02/2025] Update zig build
