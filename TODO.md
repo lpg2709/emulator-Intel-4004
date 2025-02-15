@@ -4,7 +4,6 @@ Task for the project. (Moved from Clickup)
 
 ## Backlog
 
-- (Emulator) Fix instruction WRn, not executing correct
 - Create a program to write on every ram, chip and banks
 - Update zig build
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
@@ -24,6 +23,8 @@ Task for the project. (Moved from Clickup)
 - (v1.0.1) Remove bin files, add new arg option to gennerate sample roms file
 
 ## Doing
+
+- (Emulator) Fix RAM MEMORY print, is not printing RAM_status
 
 ## Blocked
 
@@ -49,3 +50,4 @@ Task for the project. (Moved from Clickup)
 - [12/02/2025] (Disassembler) Develop the disassembler module
 - [13/02/2025] Add doc for development
 - [13/02/2025] (Emulator) ADD opcode (disassembled) view on emulation
+- [15/02/2025] (Emulator) Fix instruction WRn, not executing correct

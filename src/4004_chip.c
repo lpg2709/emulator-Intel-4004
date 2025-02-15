@@ -460,8 +460,7 @@ void opcode_wrr(chip_4004 *c){
 void opcode_wrN(chip_4004 *c, uint8_t n){
 	uint8_t s_register = ((c->RAM_addrs & 0xF0) >> 4) & 0x03;
 	uint8_t s_chip = (((c->RAM_addrs & 0xF0) >> 4) & 0x0C) >> 2;
-    // TODO: FIX, this get 0 every time if RAM_bank = 0
-	c->RAM_status[((4 * s_register) + (16*s_chip) + n) * c->RAM_bank] = c->ACC &0x0F;
+	c->RAM_status[(((4 * s_register) + (16*s_chip)) + (64 * c->RAM_bank)) + n] = c->ACC &0x0F;
 	c->PC++;
 }
 
