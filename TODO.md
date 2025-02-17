@@ -4,7 +4,6 @@ Task for the project. (Moved from Clickup)
 
 ## Backlog
 
-- Create a program to write on every ram, chip and banks
 - Add scan and parse for '*' page 36, 3.1.5 topic (2)
 - Add scan and parse for aritimatic expression page 37, 3.1.5 topic (5)
 - (Tests) Add uinit test for token scanner using src files inside project
@@ -22,6 +21,8 @@ Task for the project. (Moved from Clickup)
 - (v1.0.1) Remove bin files, add new arg option to gennerate sample roms file
 
 ## Doing
+
+- Create a program to write on every ram, chip and banks
 
 ## Blocked
 
