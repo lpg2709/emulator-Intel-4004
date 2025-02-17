@@ -256,6 +256,9 @@ void opcode_jms(chip_4004 *c, uint16_t opa){
 
 void opcode_inc(chip_4004 *c, uint8_t opa){
 	c->IR[opa & 0xF]++;
+    if(c->IR[opa & 0xF] > 0x0F) {
+        c->IR[opa & 0xF] = 0;
+    }
 	c->PC++;
 }
 
