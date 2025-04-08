@@ -14,11 +14,12 @@ Task for the project. (Moved from Clickup)
 - (Tests) Add test to run and check results of programs inside roms/ folder
 - (Emulator) Add option to manipulate registers direct
 - Add tests on zig build
-- Improve error handling for emulator
-- Improve error handling for assembler - Tokens gennerator
-- Improve error handling for assembler - Parser
 - (Release) Version 1.0.0; Only when assembler, disassembler and emulator is stable
 - (v1.0.1) Remove bin files, add new arg option to gennerate sample roms file
+  and binary
+- (v1.0.1) Improve error handling for emulator
+- (v1.0.1) Improve error handling for assembler - Tokens gennerator
+- (v1.0.1) Improve error handling for assembler - Parser
 
 ## Doing
 
